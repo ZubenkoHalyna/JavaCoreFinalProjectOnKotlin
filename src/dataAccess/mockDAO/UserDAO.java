@@ -5,8 +5,8 @@ import entities.User;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by ssizov on 17.01.2017.
@@ -19,18 +19,18 @@ class UserDAO extends DAO<User> {
         String id = params.get(User.Fields.ID.toString());
         String login = params.get(User.Fields.LOGIN.toString());
 
-        Stream<User> userStream = users.stream();
+        Predicate<User> predicate = u->true;
 
         if (!(id == null || id.isEmpty()) ) {
             long castedId = Long.parseLong(id);
-            userStream = userStream.filter(user -> user.getId() == castedId);
+            predicate.and(user -> user.getId() == castedId);
         }
 
         if (!(login == null || login.isEmpty())) {
-            userStream = userStream.filter(user -> user.getLogin().equals(login));
+            predicate.and(user -> user.getLogin().equals(login));
         }
 
-        return userStream.collect(Collectors.toSet());
+        return users.stream().filter(predicate).collect(Collectors.toSet());
     }
 
     @Override

@@ -10,8 +10,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 18.01.2017.
@@ -35,32 +35,32 @@ class RoomDAO extends DAO<Room>{
         String startDate = params.get(Room.Fields.START_DATE.toString());
         String endDate   = params.get(Room.Fields.END_DATE.toString());
 
-        Stream<Room> roomStream = rooms.stream();
+        Predicate<Room> predicate=r->true;
 
         if (!(id == null || id.isEmpty())){
             long castedId = Long.parseLong(id);
-            roomStream = roomStream.filter(r->r.getId()==castedId);
+            predicate=predicate.and(r->r.getId()==castedId);
         }
 
         if (!(price == null || price.isEmpty())){
             long castedPrice = Long.parseLong(price);
-            roomStream = roomStream.filter(r->
+            predicate=predicate.and(r->
                     r.getPrice() >= castedPrice*(1-PRICE_VARIATION) &&
                     r.getPrice() <= castedPrice*(1+PRICE_VARIATION));
         }
 
         if (!(persons == null || persons.isEmpty())){
             long castedPersons = Long.parseLong(persons);
-            roomStream = roomStream.filter(r->r.getPersons()==castedPersons);
+            predicate=predicate.and(r->r.getPersons()==castedPersons);
         }
 
         if (!(hotelId == null || hotelId.isEmpty())){
             long castedHotelId = Long.parseLong(hotelId);
-            roomStream = roomStream.filter(r->r.getHotelId()==castedHotelId);
+            predicate=predicate.and(r->r.getHotelId()==castedHotelId);
         }
 
         if (!(city == null || city.isEmpty())){
-            roomStream = roomStream.filter(r->{
+            predicate=predicate.and(r->{
                 try {
                     Hotel h = getHotelDAO().getById(r.getHotelId());
                     if (h.getCity()==null) return false;
@@ -83,13 +83,13 @@ class RoomDAO extends DAO<Room>{
                     castedEndDate = new Date(castedStartDate.getTime());
                 }
                 OrderDAO dao = getOrderDAO();
-                roomStream.filter(r->! dao.orderExisrs(r,castedStartDate,castedEndDate));
+                predicate=predicate.and(r->! (dao.orderExists(r,castedStartDate,castedEndDate)));
             } catch (StringToDateConvertingException e) {
                 System.err.print(e.getMessage());
             }
         }
 
-        return roomStream.collect(Collectors.toSet());
+        return rooms.stream().filter(predicate).collect(Collectors.toSet());
     }
 
     @Override

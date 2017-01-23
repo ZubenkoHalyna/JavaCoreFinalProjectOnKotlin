@@ -65,9 +65,9 @@ public class Controller {
         hotelDAO.insert(hotels[3]);
 
         DAOInterface<Room> roomDAO = DAOProvider.getRoomDAO();
-        Room r=new Room(idProvider.getNewId(),750,1,hotels[0].getId());
+        roomDAO.insert(new Room(idProvider.getNewId(),750,1,hotels[0].getId()));
+        Room r=new Room(idProvider.getNewId(),1000,2,hotels[0].getId());
         roomDAO.insert(r);
-        roomDAO.insert(new Room(idProvider.getNewId(),1000,2,hotels[0].getId()));
         roomDAO.insert(new Room(idProvider.getNewId(),1500,3,hotels[0].getId()));
 
         roomDAO.insert(new Room(idProvider.getNewId(),650,1,hotels[1].getId()));
@@ -102,7 +102,7 @@ public class Controller {
         DAOInterface<Order> orderDAO = DAOProvider.getOrderDAO();
         DateUtil util = DateUtil.getInstance();
         orderDAO.insert(new Order(idProvider.getNewId(),user.getId(),r.getId(), util.stringToDate("10.02.2017"),
-                util.stringToDate("12.02.2017")));
+                util.stringToDate("20.02.2017")));
     }
 
     public IdProvider getIdProvider() {

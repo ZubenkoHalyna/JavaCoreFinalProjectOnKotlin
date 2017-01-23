@@ -5,8 +5,8 @@ import entities.Hotel;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 16.01.2017.
@@ -25,22 +25,22 @@ class HotelDAO extends DAO<Hotel> {
         String name = params.get(Hotel.Fields.NAME.toString());
         String city = params.get(Hotel.Fields.CITY.toString());
 
-        Stream<Hotel> hotelStream = hotels.stream();
+        Predicate<Hotel> predicate = h->true;
 
         if (!(id == null || id.isEmpty())){
             long castedId = Long.parseLong(id);
-            hotelStream = hotelStream.filter(h->h.getId()==castedId);
+            predicate.and(h->h.getId()==castedId);
         }
 
         if (!(name == null || name.isEmpty())){
-            hotelStream = hotelStream.filter(h->h.getName().equals(name));
+            predicate.and(h->h.getName().equals(name));
         }
 
         if (!(city == null || city.isEmpty())){
-            hotelStream = hotelStream.filter(h->h.getCity().equals(city));
+            predicate.and(h->h.getCity().equals(city));
         }
 
-        return hotelStream.collect(Collectors.toSet());
+        return hotels.stream().filter(predicate).collect(Collectors.toSet());
     }
 
     @Override
