@@ -1,9 +1,9 @@
 package entities;
 
 public class Hotel extends BaseEntity {
+    public enum Fields {ID, NAME, CITY}
     private String name;
     private String city;
-    public enum Fields {ID, NAME, CITY}
 
     public Hotel(long id, String name, String city) {
         super(id);
@@ -13,10 +13,7 @@ public class Hotel extends BaseEntity {
 
     @Override
     public String toString() {
-        return "Hotel{" +
-                "name='" + name + '\'' +
-                ", city='" + city + '\'' +
-                '}';
+        return name;
     }
 
     public String getName() {

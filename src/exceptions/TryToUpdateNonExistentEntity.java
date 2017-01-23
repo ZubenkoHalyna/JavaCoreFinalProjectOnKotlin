@@ -1,4 +1,4 @@
-package dataAccess.exceptions;
+package exceptions;
 
 import entities.BaseEntity;
 

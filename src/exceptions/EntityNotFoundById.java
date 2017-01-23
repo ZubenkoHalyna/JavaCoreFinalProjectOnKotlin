@@ -1,4 +1,4 @@
-package dataAccess.exceptions;
+package exceptions;
 
 /**
  * Created by g.zubenko on 23.01.2017.

@@ -1,8 +1,8 @@
-import dataAccess.mockDAO.DAO;
-import dataAccess.mockDAO.HotelDAO;
-import dataAccess.mockDAO.RoomDAO;
-import dataAccess.mockDAO.UserDAO;
+package dataAccess.mockDAO;
+
+import dataAccess.DAOAbstractFactory;
 import entities.Hotel;
+import entities.Order;
 import entities.Room;
 import entities.User;
 
@@ -23,5 +23,10 @@ public class MockDAOFactory implements DAOAbstractFactory {
     @Override
     public DAO<Room> getRoomDAO() {
         return new RoomDAO();
+    }
+
+    @Override
+    public DAO<Order> getOrderDAO() {
+        return new OrderDAO();
     }
 }

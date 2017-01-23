@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 /**
  * Created by ssizov on 17.01.2017.
  */
-public class UserDAO extends DAO<User> {
+class UserDAO extends DAO<User> {
     private static Set<User> users = new HashSet<>();
 
     @Override

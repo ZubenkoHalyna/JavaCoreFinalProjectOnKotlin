@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 /**
  * Created by g.zubenko on 16.01.2017.
  */
-public class HotelDAO extends DAO<Hotel> {
+class HotelDAO extends DAO<Hotel> {
     private static Set<Hotel> hotels = new HashSet<>();
 
     @Override
@@ -27,7 +27,6 @@ public class HotelDAO extends DAO<Hotel> {
 
         Stream<Hotel> hotelStream = hotels.stream();
 
-        //Maybe we should optimize this. It may be too slow!
         if (!(id == null || id.isEmpty())){
             long castedId = Long.parseLong(id);
             hotelStream = hotelStream.filter(h->h.getId()==castedId);

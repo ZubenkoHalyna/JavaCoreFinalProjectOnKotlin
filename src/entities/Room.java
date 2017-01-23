@@ -1,16 +1,25 @@
 package entities;
 
 public class Room extends BaseEntity {
+    public enum Fields {ID, PRICE, PERSONS, HOTEL_ID, CITY, START_DATE, END_DATE}
     private int price;
     private int persons;
     private long hotelId;
-    public enum Fields {ID, PRICE, PERSONS, HOTEL_ID, CITY}
 
     public Room(long id, int price, int persons, long hotelId) {
         super(id);
         this.price = price;
         this.persons = persons;
         this.hotelId = hotelId;
+    }
+
+    @Override
+    public String toString() {
+        return "Room{" +
+                "price=" + price +
+                ", persons=" + persons +
+                ", hotelId=" + hotelId +
+                '}';
     }
 
     public int getPrice() {
