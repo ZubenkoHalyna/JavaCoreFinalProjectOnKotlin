@@ -11,11 +11,6 @@ public class User extends BaseEntity{
         this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return login;
-    }
-
     public String getLogin() {
         return login;
     }

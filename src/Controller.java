@@ -85,16 +85,28 @@ public class Controller {
         return buf;
     }
 
-    public void registerOrder(User user, Room room, Date startDate, Date endDate){
-        DAOProvider.getOrderDAO().insert(new Order(idProvider.getNewId(),user.getId(), room.getId(), startDate, endDate));
+    public Order registerOrder(User user, Room room, Date startDate, Date endDate){
+        Order order = new Order(idProvider.getNewId(),user.getId(), room.getId(), startDate, endDate);
+        DAOProvider.getOrderDAO().insert(order);
+        return order;
     }
 
     public boolean isRoomFree(Room room, Date startDate, Date endDate){
         Map<String,String> params = new HashMap<>();
-        params.put(Room.Fields.START_DATE.toString(), DateUtil.getInstance().dateToStr(startDate));
-        params.put(Room.Fields.END_DATE.toString(), DateUtil.getInstance().dateToStr(endDate));
+        params.put(Room.Fields.START_DATE.toString(), DateUtil.dateToStr(startDate));
+        params.put(Room.Fields.END_DATE.toString(), DateUtil.dateToStr(endDate));
         params.put(Room.Fields.ID.toString(), room.getId()+"");
-        return ! DAOProvider.getRoomDAO().selectFirst(params).isPresent();
+        return DAOProvider.getRoomDAO().selectFirst(params).isPresent();
+    }
+
+    public Collection<Order> findOrdersByUser(User user){
+        Map<String, String> params = new HashMap<>();
+        params.put(Order.Fields.USER_ID.toString(),user.getId()+"");
+        return DAOProvider.getOrderDAO().select(params);
+    }
+
+    public void deleteOrder(Order order){
+        DAOProvider.getOrderDAO().delete(order);
     }
 
     public IdProvider getIdProvider() {
@@ -158,9 +170,8 @@ public class Controller {
         roomDAO.insert(new Room(idProvider.getNewId(),1550,3,hotels[3].getId()));
 
         DAOInterface<Order> orderDAO = DAOProvider.getOrderDAO();
-        DateUtil util = DateUtil.getInstance();
-        orderDAO.insert(new Order(idProvider.getNewId(),user.getId(),r.getId(), util.stringToDate("10.02.2017"),
-                util.stringToDate("20.02.2017")));
+        orderDAO.insert(new Order(idProvider.getNewId(),user.getId(),r.getId(), DateUtil.stringToDate("10.02.2017"),
+                DateUtil.stringToDate("20.02.2017")));
     }
 
 }

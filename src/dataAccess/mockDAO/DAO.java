@@ -19,6 +19,7 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     abstract protected Set<T> getStorage();
     abstract public Stream<T> filter(Map<String,String> params);
     abstract protected Class getEntityClass();
+    abstract public String getView(T obj);
 
     public Set<T> select(Map<String,String> params){
         return filter(params).collect(Collectors.toSet());
@@ -30,12 +31,14 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
 
     public void insert(T item){
         getStorage().add(item);
+        item.setView(getView(item));
     }
 
     public void update(T item){
         Set<T> storage = getStorage();
         if (storage.contains(item)){
             storage.add(item);
+            item.setView(getView(item));
         }
         else {
             throw new TryToUpdateNonExistentEntity(item);

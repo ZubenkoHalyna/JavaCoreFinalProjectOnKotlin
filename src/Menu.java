@@ -1,3 +1,5 @@
+import entities.BaseEntity;
+import entities.Order;
 import entities.Room;
 import entities.User;
 import exceptions.StringToDateConvertingException;
@@ -8,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by g.zubenko on 24.01.2017.
@@ -20,7 +23,6 @@ public class Menu {
     private Session session;
     private Controller controller;
     private Optional<Operator> nextItem = Optional.empty();
-    private Room[] lastRoomsFind;
 
     public Menu(Session session, Controller controller) {
         this.session = session;
@@ -89,6 +91,8 @@ public class Menu {
         }
         else{
             System.out.println("User unregistered or password is incorrect");
+            System.out.print("Try to log in again?");
+            askToContinue(this::login);
         }
     }
 
@@ -98,30 +102,24 @@ public class Menu {
             String value = readString(field.toLowerCase().replace('_',' ')+" or press enter to skip this filter");
             params.put(field,value);
         });
-        Collection<Room> c = controller.findRoom(params);
-        lastRoomsFind = c.toArray(new Room[c.size()]);
-        System.out.println(c);
+        ArrayList<Room> c = new ArrayList<>(controller.findRoom(params));
+        printCollection(c);
 
-        System.out.print("Would you like to book some room? ");
-        askToContinue(this::bookRoom);
+        System.out.print("Would you like to book some room?");
+        askToContinue(this::bookRoom, c);
     }
 
     private User getRegisteredUser() throws UnAuthorizedSessionException {
-        User user;
-        try{
-            user = session.getUser();
-        }
-        catch (UnAuthorizedSessionException e){
-            System.out.println(e.getMessage());
-            nextItem = Optional.of(this::bookRoom);
-            System.out.print("Try to login?");
+        try {
+            return session.getUser();
+        } catch (UnAuthorizedSessionException e) {
+            System.out.print(e.getMessage() + " Try to login?");
             askToContinue(this::login);
-            throw e;
+            return session.getUser();
         }
-        return user;
     }
 
-    private void bookRoom(){
+    private void bookRoom(ArrayList<Room> rooms){
         User user;
         try {
             user = getRegisteredUser();
@@ -130,32 +128,65 @@ public class Menu {
             return;
         }
 
-        int numberOfRoom = readInt("number of room you want to book",lastRoomsFind.length);
-        Room room = lastRoomsFind[numberOfRoom];
+        int numberOfRoom = readInt("number of the room you want to book",1,rooms.size())-1;
+        Room room = rooms.get(numberOfRoom);
         //TODO don't ask dates again
+        //TODO startSate before endDate
         Date startDate = readFutureDate("start reservation date");
         Date endDate = readFutureDate("end reservation date");
         if (controller.isRoomFree(room,startDate,endDate)){
-            System.out.println("Sorry, room has already reserved");
+            Order order = controller.registerOrder(user, room, startDate, endDate);
+            System.out.println("Registered order: "+order.toString());
         }
         else{
-            controller.registerOrder(user, lastRoomsFind[numberOfRoom],startDate,endDate);
+            System.out.println("Sorry, room has already reserved");
         }
     }
 
     private void viewOrders() {
+        User user;
+        try {
+            user = getRegisteredUser();
+        } catch (UnAuthorizedSessionException e) {
+            return;
+        }
+
+        ArrayList<Order> orders = new ArrayList<>(controller.findOrdersByUser(user));
+        Collections.sort(orders);
+
+        if (orders.size() > 0) {
+            printCollection(orders);
+            System.out.println("Would you like to cancel reservation?");
+            askToContinue(this::cancelReservation,orders);
+        } else {
+            System.out.println("You haven't made any orders yet");
+        }
+    }
+
+    public void cancelReservation(ArrayList<Order> orders) {
+        User user;
+        try {
+            user = getRegisteredUser();
+        } catch (UnAuthorizedSessionException e) {
+            return;
+        }
+
+        int numberOfRoom = readInt("number of the reservation", 1, orders.size()) - 1;
+        controller.deleteOrder(orders.get(numberOfRoom));
+        System.out.println("Order was deleted successfully!");
 
     }
 
     private void findHotelByCity() {
         String city = readString("city name",true);
-        System.out.println(controller.findHotelByCity(city));
+        printCollection(controller.findHotelByCity(city));
     }
 
     private void findHotelByName() {
         String hotelName = readString("hotel name",true);
-        System.out.println(controller.findHotelByName(hotelName));
+        printCollection(controller.findHotelByName(hotelName));
     }
+
 
     private void askToContinue(Operator operator){
         System.out.print(" (Y - yes/N - no) ");
@@ -167,6 +198,19 @@ public class Menu {
         } catch (IOException e){
             System.out.println(IOExceptionMsg);
             askToContinue(operator);
+        }
+    }
+
+    private <T> void askToContinue(Consumer<ArrayList<T>> consumer, ArrayList<T> param){
+        System.out.print(" (Y - yes/N - no) ");
+        try {
+            String s = consoleReader.readLine();
+            if (!s.isEmpty() && (s.charAt(0)=='y' || s.charAt(0)=='Y')){
+                consumer.accept(param);
+            }
+        } catch (IOException e){
+            System.out.println(IOExceptionMsg);
+            askToContinue(consumer, param);
         }
     }
 
@@ -196,49 +240,53 @@ public class Menu {
     }
 
     private int readInt(String stringDescription) {
-        return readInt(stringDescription,-1);
+        String stringValue = readString(stringDescription, true);
+        try {
+            return Integer.parseInt(stringValue);
+        } catch (IllegalFormatCodePointException e) {
+            System.out.println(stringDescription + " should be an integer value. Try input again.");
+            return readInt(stringDescription);
+        }
     }
 
-    private int readInt(String stringDescription, int maxValue) {
-        System.out.print("Input " + stringDescription + ": ");
-        String descriptionWithUpperFirstLetter = stringDescription.substring(0, 1).toUpperCase() +
-                stringDescription.substring(1, stringDescription.length());
-        String stringValue = readString(stringDescription, true);
-        int value;
-        try {
-            value = Integer.parseInt(stringValue);if (maxValue!=-1 && value > maxValue) {
-                System.out.println(descriptionWithUpperFirstLetter + " should be less then " + maxValue + ". Try input again.");
-                return readInt(stringDescription, maxValue);
-            } else {
-                return value;
-            }
-        } catch (IllegalFormatCodePointException e) {
-            System.out.println(descriptionWithUpperFirstLetter + " should be an integer value. Try input again.");
-            return readInt(stringDescription, maxValue);
+    private int readInt(String stringDescription, int minValue, int maxValue) {
+        int value = readInt(stringDescription);
+        if (value > maxValue) {
+            System.out.println(stringDescription + " should be less then " + (maxValue + 1) + ". Try input again.");
+            return readInt(stringDescription, minValue, maxValue);
         }
+        if (value < minValue) {
+            System.out.println(stringDescription + " should be greater then " + (minValue - 1) + ". Try input again.");
+            return readInt(stringDescription, minValue, maxValue);
+        }
+        return value;
     }
 
     private Date readFutureDate(String stringDescription) {
-        System.out.print("Input " + stringDescription + ": ");
-        String descriptionWithUpperFirstLetter = stringDescription.substring(0, 1).toUpperCase() +
-                stringDescription.substring(1, stringDescription.length());
         String stringValue = readString(stringDescription, true);
         Date value;
         try {
-            value = DateUtil.getInstance().stringToDate(stringValue);
-            Date currentDate =new Date();
-            if (value.before(currentDate)) {
-                System.out.println(descriptionWithUpperFirstLetter + " should be after " +
-                        utils.DateUtil.getInstance().dateToStr(currentDate) + ". Try input again.");
-                return readFutureDate(stringDescription);
-            } else {
-                return value;
-            }
+            value = DateUtil.stringToDate(stringValue);
         } catch (StringToDateConvertingException e) {
-            System.out.println(descriptionWithUpperFirstLetter + " should be a date in format dd.mm.yyyy. Try input again.");
+            System.out.println(stringDescription + " should be a date in format dd.mm.yyyy. Try input again.");
             return readFutureDate(stringDescription);
         }
+        Date currentDate =new Date();
+        if (value.before(currentDate)) {
+            System.out.println(stringDescription + " should be after " +
+                    DateUtil.dateToStr(currentDate) + ". Try input again.");
+            return readFutureDate(stringDescription);
+        } else {
+            return value;
+        }
+    }
 
+    private <T extends BaseEntity> void printCollection(Collection<T> c){
+        int elementNumber = 0;
+        for (T item : c) {
+            elementNumber++;
+            System.out.format("%2d %s \n",elementNumber,item.getView());
+        }
     }
 
     public boolean isNotClosed(){

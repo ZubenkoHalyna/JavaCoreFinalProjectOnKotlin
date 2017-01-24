@@ -46,4 +46,9 @@ class HotelDAO extends DAO<Hotel> {
     protected Class getEntityClass() {
         return Hotel.class;
     }
+
+    @Override
+    public String getView(Hotel hotel) {
+        return hotel.getName()+", "+hotel.getCity();
+    }
 }

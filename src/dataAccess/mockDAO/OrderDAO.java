@@ -25,7 +25,7 @@ class OrderDAO extends DAO<Order>{
         String roomId = params.get(Order.Fields.ROOM_ID.toString());
         String userId = params.get(Order.Fields.USER_ID.toString());
         String startDate = params.get(Order.Fields.START_DATE.toString());
-        String endDate = params.get(Order.Fields.START_DATE.toString());
+        String endDate = params.get(Order.Fields.END_DATE.toString());
 
         Stream<Order> orderStream = orders.stream();
 
@@ -46,7 +46,7 @@ class OrderDAO extends DAO<Order>{
 
         if (!(startDate == null || startDate.isEmpty())) {
             try {
-                Date castedStartDate = DateUtil.getInstance().stringToDate(startDate);
+                Date castedStartDate = DateUtil.stringToDate(startDate);
                 orderStream = orderStream.filter(o -> o.getStartReservationDate().equals(castedStartDate));
             } catch (StringToDateConvertingException e) {
                 System.err.print(e.getMessage());
@@ -55,7 +55,7 @@ class OrderDAO extends DAO<Order>{
 
         if (!(endDate == null || endDate.isEmpty())) {
             try {
-                Date castedEndDate = DateUtil.getInstance().stringToDate(endDate);
+                Date castedEndDate = DateUtil.stringToDate(endDate);
                 orderStream = orderStream.filter(o -> o.getEndReservationDate().equals(castedEndDate));
             } catch (StringToDateConvertingException e) {
                 System.err.print(e.getMessage());
@@ -81,5 +81,12 @@ class OrderDAO extends DAO<Order>{
     @Override
     protected Class getEntityClass() {
         return Order.class;
+    }
+
+    @Override
+    public String getView(Order order) {
+        return getRoomDAO().getById(order.getRoomId()).getView()+", from "+
+                DateUtil.dateToStr(order.getStartReservationDate())+ " to "+
+                DateUtil.dateToStr(order.getEndReservationDate());
     }
 }

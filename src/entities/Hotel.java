@@ -11,11 +11,6 @@ public class Hotel extends BaseEntity {
         this.city = city;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
     public String getName() {
         return name;
     }

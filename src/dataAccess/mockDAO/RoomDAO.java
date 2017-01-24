@@ -73,10 +73,10 @@ class RoomDAO extends DAO<Room>{
 
         if (!(startDate == null || startDate.isEmpty())) {
             try {
-                Date castedStartDate = DateUtil.getInstance().stringToDate(startDate);
+                Date castedStartDate = DateUtil.stringToDate(startDate);
                 Date castedEndDate;
                 if (!(endDate == null || endDate.isEmpty())) {
-                    castedEndDate = DateUtil.getInstance().stringToDate(endDate);
+                    castedEndDate = DateUtil.stringToDate(endDate);
                 } else {
                     castedEndDate = new Date(castedStartDate.getTime());
                 }
@@ -93,5 +93,12 @@ class RoomDAO extends DAO<Room>{
     @Override
     protected Class getEntityClass() {
         return Room.class;
+    }
+
+    @Override
+    public String getView(Room room) {
+        return getHotelDAO().getById(room.getHotelId()).getView()+", "+
+                room.getPrice()+"$ per day, "+
+                room.getPersons()+"person"+((room.getPersons()==1)?"":"s");
     }
 }

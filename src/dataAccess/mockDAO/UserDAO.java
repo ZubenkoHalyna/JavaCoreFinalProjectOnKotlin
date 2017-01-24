@@ -46,4 +46,9 @@ class UserDAO extends DAO<User> {
     protected Class getEntityClass() {
         return User.class;
     }
+
+    @Override
+    public String getView(User user) {
+        return user.getLogin();
+    }
 }

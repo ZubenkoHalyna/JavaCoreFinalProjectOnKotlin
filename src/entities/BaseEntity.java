@@ -5,9 +5,15 @@ package entities;
  */
 public class BaseEntity {
     private long id;
+    private String view;
 
     public BaseEntity(long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return view;
     }
 
     @Override
@@ -28,5 +34,13 @@ public class BaseEntity {
 
     public long getId() {
         return id;
+    }
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
     }
 }

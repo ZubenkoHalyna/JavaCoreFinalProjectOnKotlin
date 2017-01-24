@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by g.zubenko on 23.01.2017.
  */
-public class Order extends BaseEntity{
+public class Order extends BaseEntity implements Comparable<Order>{
     public enum Fields {ID, USER_ID, ROOM_ID, START_DATE, END_DATE}
     private long userId;
     private long roomId;
@@ -19,6 +19,18 @@ public class Order extends BaseEntity{
         this.roomId = roomId;
         this.startReservationDate = startReservationDate;
         this.endReservationDate = endReservationDate;
+    }
+
+    @Override
+    public int compareTo(Order o) {
+        if (equals(o)) return 0;
+        if (startReservationDate.after(o.getStartReservationDate())) {
+            return -1;
+        }
+        if (startReservationDate.equals(endReservationDate)){
+            return roomId>o.getId()? -1:1;
+        }
+        return 1;
     }
 
     public long getUserId() {

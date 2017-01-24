@@ -13,15 +13,6 @@ public class Room extends BaseEntity {
         this.hotelId = hotelId;
     }
 
-    @Override
-    public String toString() {
-        return "Room{" +
-                "price=" + price +
-                ", persons=" + persons +
-                ", hotelId=" + hotelId +
-                '}';
-    }
-
     public int getPrice() {
         return price;
     }
