@@ -5,8 +5,7 @@ import entities.User;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by ssizov on 17.01.2017.
@@ -15,22 +14,27 @@ class UserDAO extends DAO<User> {
     private static Set<User> users = new HashSet<>();
 
     @Override
-    public Set<User> select(Map<String, String> params) {
+    public Stream<User> filter(Map<String, String> params) {
         String id = params.get(User.Fields.ID.toString());
         String login = params.get(User.Fields.LOGIN.toString());
+        String password = params.get(User.Fields.PASSWORD.toString());
 
-        Predicate<User> predicate = u->true;
+        Stream<User> userStream = users.stream();
 
         if (!(id == null || id.isEmpty()) ) {
             long castedId = Long.parseLong(id);
-            predicate.and(user -> user.getId() == castedId);
+            userStream = userStream.filter(user -> user.getId() == castedId);
         }
 
         if (!(login == null || login.isEmpty())) {
-            predicate.and(user -> user.getLogin().equals(login));
+            userStream = userStream.filter(user -> user.getLogin().equalsIgnoreCase(login));
         }
 
-        return users.stream().filter(predicate).collect(Collectors.toSet());
+        if (!(password == null)) {
+            userStream = userStream.filter(user -> user.getPassword().equals(password));
+        }
+
+        return userStream;
     }
 
     @Override

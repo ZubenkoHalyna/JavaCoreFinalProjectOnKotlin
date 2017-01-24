@@ -5,8 +5,7 @@ import entities.Hotel;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 16.01.2017.
@@ -20,27 +19,27 @@ class HotelDAO extends DAO<Hotel> {
     }
 
     @Override
-    public Set<Hotel> select(Map<String,String> params) {
+    public Stream<Hotel> filter(Map<String,String> params) {
         String id = params.get(Hotel.Fields.ID.toString());
         String name = params.get(Hotel.Fields.NAME.toString());
         String city = params.get(Hotel.Fields.CITY.toString());
 
-        Predicate<Hotel> predicate = h->true;
+        Stream<Hotel> hotelStream = hotels.stream();
 
-        if (!(id == null || id.isEmpty())){
+        if (!(id == null || id.isEmpty())) {
             long castedId = Long.parseLong(id);
-            predicate.and(h->h.getId()==castedId);
+            hotelStream = hotelStream.filter(h -> h.getId() == castedId);
         }
 
-        if (!(name == null || name.isEmpty())){
-            predicate.and(h->h.getName().equals(name));
+        if (!(name == null || name.isEmpty())) {
+            hotelStream = hotelStream.filter(h -> h.getName().equalsIgnoreCase(name));
         }
 
-        if (!(city == null || city.isEmpty())){
-            predicate.and(h->h.getCity().equals(city));
+        if (!(city == null || city.isEmpty())) {
+            hotelStream = hotelStream.filter(h -> h.getCity().equalsIgnoreCase(city));
         }
 
-        return hotels.stream().filter(predicate).collect(Collectors.toSet());
+        return hotelStream;
     }
 
     @Override

@@ -10,8 +10,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 18.01.2017.
@@ -26,47 +25,46 @@ class RoomDAO extends DAO<Room>{
     }
 
     @Override
-    public Set<Room> select(Map<String, String> params) {
-        String id        = params.get(Room.Fields.ID.toString());
-        String price     = params.get(Room.Fields.PRICE.toString());
-        String persons   = params.get(Room.Fields.PERSONS.toString());
-        String hotelId   = params.get(Room.Fields.HOTEL_ID.toString());
-        String city      = params.get(Room.Fields.CITY.toString());
+    public Stream<Room> filter(Map<String, String> params) {
+        String id = params.get(Room.Fields.ID.toString());
+        String price = params.get(Room.Fields.PRICE.toString());
+        String persons = params.get(Room.Fields.PERSONS.toString());
+        String hotelId = params.get(Room.Fields.HOTEL_ID.toString());
+        String city = params.get(Room.Fields.CITY.toString());
         String startDate = params.get(Room.Fields.START_DATE.toString());
-        String endDate   = params.get(Room.Fields.END_DATE.toString());
+        String endDate = params.get(Room.Fields.END_DATE.toString());
 
-        Predicate<Room> predicate=r->true;
+        Stream<Room> roomStream = rooms.stream();
 
-        if (!(id == null || id.isEmpty())){
+        if (!(id == null || id.isEmpty())) {
             long castedId = Long.parseLong(id);
-            predicate=predicate.and(r->r.getId()==castedId);
+            roomStream = roomStream.filter(r -> r.getId() == castedId);
         }
 
-        if (!(price == null || price.isEmpty())){
+        if (!(price == null || price.isEmpty())) {
             long castedPrice = Long.parseLong(price);
-            predicate=predicate.and(r->
-                    r.getPrice() >= castedPrice*(1-PRICE_VARIATION) &&
-                    r.getPrice() <= castedPrice*(1+PRICE_VARIATION));
+            roomStream = roomStream.filter(r ->
+                    r.getPrice() >= castedPrice * (1 - PRICE_VARIATION) &&
+                            r.getPrice() <= castedPrice * (1 + PRICE_VARIATION));
         }
 
-        if (!(persons == null || persons.isEmpty())){
+        if (!(persons == null || persons.isEmpty())) {
             long castedPersons = Long.parseLong(persons);
-            predicate=predicate.and(r->r.getPersons()==castedPersons);
+            roomStream = roomStream.filter(r -> r.getPersons() == castedPersons);
         }
 
-        if (!(hotelId == null || hotelId.isEmpty())){
+        if (!(hotelId == null || hotelId.isEmpty())) {
             long castedHotelId = Long.parseLong(hotelId);
-            predicate=predicate.and(r->r.getHotelId()==castedHotelId);
+            roomStream = roomStream.filter(r -> r.getHotelId() == castedHotelId);
         }
 
-        if (!(city == null || city.isEmpty())){
-            predicate=predicate.and(r->{
+        if (!(city == null || city.isEmpty())) {
+            roomStream = roomStream.filter(r -> {
                 try {
                     Hotel h = getHotelDAO().getById(r.getHotelId());
-                    if (h.getCity()==null) return false;
-                    return h.getCity().equals(city);
-                }
-                catch (EntityNotFoundById e) {
+                    if (h.getCity() == null) return false;
+                    return h.getCity().equalsIgnoreCase(city);
+                } catch (EntityNotFoundById e) {
                     System.err.print(e.getMessage());
                     return false;
                 }
@@ -83,13 +81,13 @@ class RoomDAO extends DAO<Room>{
                     castedEndDate = new Date(castedStartDate.getTime());
                 }
                 OrderDAO dao = getOrderDAO();
-                predicate=predicate.and(r->! (dao.orderExists(r,castedStartDate,castedEndDate)));
+                roomStream = roomStream.filter(r -> !(dao.orderExists(r, castedStartDate, castedEndDate)));
             } catch (StringToDateConvertingException e) {
                 System.err.print(e.getMessage());
             }
         }
 
-        return rooms.stream().filter(predicate).collect(Collectors.toSet());
+        return roomStream;
     }
 
     @Override

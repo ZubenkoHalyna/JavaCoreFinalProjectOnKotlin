@@ -1,6 +1,7 @@
 package dataAccess;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -8,6 +9,7 @@ import java.util.Set;
  */
 public interface DAOInterface<T> {
     Set<T> select(Map<String,String> params);
+    Optional<T> selectFirst(Map<String,String> params);
     void insert(T item);
     void update(T item);
     void delete(T item);
