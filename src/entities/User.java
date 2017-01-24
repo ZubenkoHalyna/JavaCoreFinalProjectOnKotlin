@@ -1,7 +1,7 @@
 package entities;
 
 public class User extends BaseEntity{
-    public enum Fields {ID, LOGIN}
+    public enum Fields {ID, LOGIN, PASSWORD}
     private String login;
     private String password;
 
@@ -22,5 +22,13 @@ public class User extends BaseEntity{
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

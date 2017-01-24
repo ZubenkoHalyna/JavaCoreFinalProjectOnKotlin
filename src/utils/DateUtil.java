@@ -2,6 +2,7 @@ package utils;
 
 import exceptions.StringToDateConvertingException;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -36,5 +37,10 @@ public class DateUtil {
 
         Calendar c = new GregorianCalendar(day,month,year);
         return c.getTime();
+    }
+
+    public String dateToStr(Date date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        return dateFormat.format(date);
     }
 }

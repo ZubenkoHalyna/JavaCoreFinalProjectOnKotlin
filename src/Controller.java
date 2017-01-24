@@ -1,24 +1,25 @@
 import dataAccess.DAOAbstractFactory;
 import dataAccess.DAOInterface;
-import dataAccess.mockDAO.MockDAOFactory;
 import entities.Hotel;
 import entities.Order;
 import entities.Room;
 import entities.User;
 import identification.IdProvider;
-import identification.UuidProvider;
 import utils.DateUtil;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by g.zubenko on 16.01.2017.
  */
 public class Controller {
-    private IdProvider idProvider = UuidProvider.getInstance();
-    private DAOAbstractFactory DAOProvider = new MockDAOFactory();
+    private final IdProvider idProvider;
+    private final DAOAbstractFactory DAOProvider;
+
+    public Controller(IdProvider idProvider, DAOAbstractFactory DAOProvider) {
+        this.idProvider = idProvider;
+        this.DAOProvider = DAOProvider;
+    }
 
     public boolean addHotel(String name, String city){
         DAOInterface<Hotel> daObj = DAOProvider.getHotelDAO();
@@ -47,9 +48,66 @@ public class Controller {
         return DAOProvider.getRoomDAO().select(params);
     }
 
+    public User registerUser(String login, String password) {
+        //TODO if cannot register, user has already registered.
+        //TODO only english letters supported. Make some mask for login and password.
+        if (login.isEmpty()) {
+            throw new IllegalArgumentException("Login cannot be empty");
+        } else {
+            User user = new User(idProvider.getNewId(), login, password);
+            DAOProvider.getUserDAO().insert(user);
+            return user;
+        }
+    }
+
+    public Optional<Session> startProtectedSession(String login, String password){
+        Map<String, String> params = new HashMap<>();
+        params.put(User.Fields.LOGIN.toString(),login);
+        params.put(User.Fields.PASSWORD.toString(),password);
+        Optional<User> user = DAOProvider.getUserDAO().selectFirst(params);
+        if (user.isPresent()){
+            return Optional.of(new Session(user.get()));
+        }
+        else {
+            return Optional.empty();
+        }
+    }
+
+    public List<String> getRoomSearchFields() {
+        Room.Fields[] fields = Room.Fields.values();
+        List<String> buf = new ArrayList<>();
+        for (Room.Fields field : fields) {
+            String fieldName = field.toString();
+            if (! fieldName.contains("ID")){
+                buf.add(fieldName);
+            }
+        }
+        return buf;
+    }
+
+    public void registerOrder(User user, Room room, Date startDate, Date endDate){
+        DAOProvider.getOrderDAO().insert(new Order(idProvider.getNewId(),user.getId(), room.getId(), startDate, endDate));
+    }
+
+    public boolean isRoomFree(Room room, Date startDate, Date endDate){
+        Map<String,String> params = new HashMap<>();
+        params.put(Room.Fields.START_DATE.toString(), DateUtil.getInstance().dateToStr(startDate));
+        params.put(Room.Fields.END_DATE.toString(), DateUtil.getInstance().dateToStr(endDate));
+        params.put(Room.Fields.ID.toString(), room.getId()+"");
+        return ! DAOProvider.getRoomDAO().selectFirst(params).isPresent();
+    }
+
+    public IdProvider getIdProvider() {
+        return idProvider;
+    }
+
+    public DAOAbstractFactory getDAOProvider() {
+        return DAOProvider;
+    }
+
     public void createData(){
         DAOInterface<User> userDAO = DAOProvider.getUserDAO();
-        User user = new User(idProvider.getNewId(),"admin","@dmin");
+        User user = new User(idProvider.getNewId(),"admin","admin");
         userDAO.insert(user);
         userDAO.insert(new User(idProvider.getNewId(),"guest",""));
 
@@ -105,19 +163,4 @@ public class Controller {
                 util.stringToDate("20.02.2017")));
     }
 
-    public IdProvider getIdProvider() {
-        return idProvider;
-    }
-
-    public void setIdProvider(IdProvider idProvider) {
-        this.idProvider = idProvider;
-    }
-
-    public DAOAbstractFactory getDAOProvider() {
-        return DAOProvider;
-    }
-
-    public void setDAOProvider(DAOAbstractFactory DAOProvider) {
-        this.DAOProvider = DAOProvider;
-    }
 }
