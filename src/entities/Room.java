@@ -1,8 +1,10 @@
 package entities;
 
+import java.io.Serializable;
+
 import static entities.FieldType.*;
 
-public class Room extends BaseEntity {
+public class Room extends BaseEntity  implements Serializable {
     public enum Fields {
         ID(                 false, LONG,  "id"),
         PRICE(              true,  INT,   "price per day"),
@@ -27,12 +29,21 @@ public class Room extends BaseEntity {
     private int price;
     private int persons;
     private long hotelId;
+    private transient Hotel cacheHotel;
 
-    public Room(long id, int price, int persons, long hotelId) {
+    public Room(long id, int price, int persons, Hotel hotel) {
         super(id);
         this.price = price;
         this.persons = persons;
-        this.hotelId = hotelId;
+        this.cacheHotel = hotel;
+        this.hotelId = hotel.getId();
+    }
+
+    @Override
+    public String toString() {
+        return cacheHotel+", "+
+                price+" USD per day, "+
+                persons+" person"+((persons==1)?"":"s");
     }
 
     public int getPrice() {
@@ -55,7 +66,12 @@ public class Room extends BaseEntity {
         return hotelId;
     }
 
-    public void setHotelId(long hotelId) {
-        this.hotelId = hotelId;
+    public void setHotel(Hotel hotel) {
+        hotelId = hotel.getId();
+        cacheHotel = hotel;
+    }
+
+    public Hotel getHotel() {
+        return cacheHotel;
     }
 }

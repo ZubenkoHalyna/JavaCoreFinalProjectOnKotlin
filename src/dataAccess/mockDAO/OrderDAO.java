@@ -1,11 +1,11 @@
 package dataAccess.mockDAO;
 
+import dataAccess.FiltersUtil;
 import entities.Order;
-import entities.Room;
-import exceptions.StringToDateConvertingException;
-import utils.DateUtil;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -15,78 +15,17 @@ class OrderDAO extends DAO<Order>{
     private static Set<Order> orders = new HashSet<>();
 
     @Override
-    protected Set<Order> getStorage() {
+    public Set<Order> selectAll() {
         return orders;
     }
 
     @Override
     public Stream<Order> filter(Map<String, String> params) {
-        String id = params.get(Order.Fields.ID.toString());
-        String roomId = params.get(Order.Fields.ROOM_ID.toString());
-        String userId = params.get(Order.Fields.USER_ID.toString());
-        String startDate = params.get(Order.Fields.START_DATE.toString());
-        String endDate = params.get(Order.Fields.END_DATE.toString());
-
-        Stream<Order> orderStream = orders.stream();
-
-        if (!(id == null || id.isEmpty())) {
-            long castedId = Long.parseLong(id);
-            orderStream = orderStream.filter(o -> o.getId() == castedId);
-        }
-
-        if (!(roomId == null || roomId.isEmpty())) {
-            long castedRoomId = Long.parseLong(roomId);
-            orderStream = orderStream.filter(o -> o.getRoomId() == castedRoomId);
-        }
-
-        if (!(userId == null || userId.isEmpty())) {
-            long castedUserId = Long.parseLong(userId);
-            orderStream = orderStream.filter(o -> o.getUserId() == castedUserId);
-        }
-
-        if (!(startDate == null || startDate.isEmpty())) {
-            try {
-                Date castedStartDate = DateUtil.stringToDate(startDate);
-                orderStream = orderStream.filter(o -> o.getStartReservationDate().equals(castedStartDate));
-            } catch (StringToDateConvertingException e) {
-                System.err.print(e.getMessage());
-            }
-        }
-
-        if (!(endDate == null || endDate.isEmpty())) {
-            try {
-                Date castedEndDate = DateUtil.stringToDate(endDate);
-                orderStream = orderStream.filter(o -> o.getEndReservationDate().equals(castedEndDate));
-            } catch (StringToDateConvertingException e) {
-                System.err.print(e.getMessage());
-            }
-        }
-
-        return orderStream;
-    }
-
-    public boolean orderExists(Room room, Date startDate, Date endDate){
-        Optional<Order> order = orders.stream().filter(o->o.getRoomId()==room.getId() && (
-             o.getStartReservationDate().equals(startDate) || o.getEndReservationDate().equals(startDate)||
-             o.getStartReservationDate().equals(endDate)   || o.getEndReservationDate().equals(endDate)  ||
-            (o.getStartReservationDate().before(startDate) && o.getEndReservationDate().after(startDate))||
-            (o.getStartReservationDate().before(endDate)   && o.getEndReservationDate().after(endDate)  )||
-            (o.getStartReservationDate().after(startDate)  && o.getEndReservationDate().before(endDate) )
-            )
-        ).findFirst();
-
-        return order.isPresent();
+        return FiltersUtil.filterOrders(params, getOrderDAO());
     }
 
     @Override
     protected Class getEntityClass() {
         return Order.class;
-    }
-
-    @Override
-    public String getView(Order order) {
-        return getRoomDAO().getById(order.getRoomId()).getView()+", from "+
-                DateUtil.dateToStr(order.getStartReservationDate())+ " to "+
-                DateUtil.dateToStr(order.getEndReservationDate());
     }
 }

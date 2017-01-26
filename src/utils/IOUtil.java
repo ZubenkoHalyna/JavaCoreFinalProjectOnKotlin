@@ -164,6 +164,19 @@ public final class IOUtil {
         }
     }
 
+    static public boolean askToContinue(String question){
+        System.out.print(question+" (Y - yes/N - no) ");
+        try {
+            String s = IOUtil.consoleReader.readLine();
+            if (!s.isEmpty() && (s.charAt(0)=='y' || s.charAt(0)=='Y')){
+                return true;
+            }
+        } catch (IOException e){
+            System.out.println(IOExceptionMsg);
+        }
+        return false;
+    }
+
     static public void askToContinue(String question, Operator operator){
         System.out.print(question+" (Y - yes/N - no) ");
         try {
@@ -187,7 +200,6 @@ public final class IOUtil {
             System.out.println(IOExceptionMsg);
         }
     }
-
 
     static public <T> void printCollection(String itemDescription, boolean waitForUser, Collection<T> c){
         printCollection(itemDescription + " on your request",

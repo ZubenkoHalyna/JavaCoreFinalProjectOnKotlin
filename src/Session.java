@@ -9,6 +9,7 @@ import java.util.Optional;
 public class Session {
     private final String GUEST_LOGIN="guest";
     private Optional<User> user;
+    private boolean isNew = true;
 
     public Session start(){
         return this;
@@ -44,4 +45,13 @@ public class Session {
             throw new UnAuthorizedSessionException();
         }
     }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+
 }

@@ -17,10 +17,8 @@ import java.util.stream.Stream;
  * Created by g.zubenko on 16.01.2017.
  */
 abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
-    abstract protected Set<T> getStorage();
     abstract public Stream<T> filter(Map<String,String> params);
     abstract protected Class getEntityClass();
-    abstract public String getView(T obj);
 
     public Set<T> select(Map<String,String> params){
         return filter(params).collect(Collectors.toSet());
@@ -31,21 +29,24 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     }
 
     public boolean insert(T item){
-        Set<T> storage = getStorage();
+        Set<T> storage = this.selectAll();
         if (storage.contains(item)) {
             throw new TryToInsertExistentEntity(item);
         }else{
-            getStorage().add(item);
-            item.setView(getView(item));
+            this.selectAll().add(item);
             return true;
         }
     }
+    public boolean insertAll(Set<T> items){
+        items.stream().forEach(this::insert);
+        //TODO correct return
+        return true;
+    }
 
     public boolean update(T item){
-        Set<T> storage = getStorage();
+        Set<T> storage = this.selectAll();
         if (storage.contains(item)){
             storage.add(item);
-            item.setView(getView(item));
             return true;
         }
         else {
@@ -54,7 +55,7 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     }
 
     public boolean delete(T item){
-        Set<T> storage = getStorage();
+        Set<T> storage = this.selectAll();
         if (storage.contains(item)){
             storage.remove(item);
             return true;
@@ -65,7 +66,7 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     }
 
     public T getById(long id) {
-        Set<T> storage = getStorage();
+        Set<T> storage = this.selectAll();
         Optional<T> obj = storage.stream().filter(item -> item.getId()==id).findFirst();
 
         if (obj.isPresent()) {

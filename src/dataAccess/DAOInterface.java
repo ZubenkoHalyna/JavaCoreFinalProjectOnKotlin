@@ -8,9 +8,12 @@ import java.util.Set;
  * Created by g.zubenko on 23.01.2017.
  */
 public interface DAOInterface<T> {
-    Set<T> select(Map<String,String> params);
+    T           getById(long id);
     Optional<T> selectFirst(Map<String,String> params);
-    boolean insert(T item);
-    boolean update(T item);
-    boolean delete(T item);
+    Set<T>      select(Map<String,String> params);
+    Set<T>      selectAll();
+    boolean     insert(T item);
+    boolean     insertAll(Set<T> items);
+    boolean     update(T item);
+    boolean     delete(T item);
 }

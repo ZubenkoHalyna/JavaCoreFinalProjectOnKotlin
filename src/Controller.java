@@ -73,7 +73,7 @@ public class Controller {
     }
 
     public Order registerOrder(User user, Room room, Date startDate, Date endDate){
-        Order order = new Order(idProvider.getNewId(),user.getId(), room.getId(), startDate, endDate);
+        Order order = new Order(idProvider.getNewId(),user, room, startDate, endDate);
         DAOProvider.getOrderDAO().insert(order);
         return order;
     }

@@ -1,19 +1,15 @@
 package entities;
 
+import java.io.Serializable;
+
 /**
  * Created by g.zubenko on 23.01.2017.
  */
-public class BaseEntity {
+public abstract class BaseEntity implements Serializable {
     private long id;
-    private String view;
 
     public BaseEntity(long id) {
         this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return view;
     }
 
     @Override
@@ -24,7 +20,6 @@ public class BaseEntity {
         BaseEntity that = (BaseEntity) o;
 
         return id == that.id;
-
     }
 
     @Override
@@ -34,13 +29,5 @@ public class BaseEntity {
 
     public long getId() {
         return id;
-    }
-
-    public String getView() {
-        return view;
-    }
-
-    public void setView(String view) {
-        this.view = view;
     }
 }

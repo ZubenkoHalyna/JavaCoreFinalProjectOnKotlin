@@ -1,5 +1,6 @@
 package dataAccess.mockDAO;
 
+import dataAccess.FiltersUtil;
 import entities.User;
 
 import java.util.HashSet;
@@ -15,40 +16,16 @@ class UserDAO extends DAO<User> {
 
     @Override
     public Stream<User> filter(Map<String, String> params) {
-        String id = params.get(User.Fields.ID.toString());
-        String login = params.get(User.Fields.LOGIN.toString());
-        String password = params.get(User.Fields.PASSWORD.toString());
-
-        Stream<User> userStream = users.stream();
-
-        if (!(id == null || id.isEmpty()) ) {
-            long castedId = Long.parseLong(id);
-            userStream = userStream.filter(user -> user.getId() == castedId);
-        }
-
-        if (!(login == null || login.isEmpty())) {
-            userStream = userStream.filter(user -> user.getLogin().equalsIgnoreCase(login));
-        }
-
-        if (!(password == null)) {
-            userStream = userStream.filter(user -> user.getPassword().equals(password));
-        }
-
-        return userStream;
+        return FiltersUtil.filterUsers(params,getUserDAO());
     }
 
     @Override
-    protected Set<User> getStorage() {
+    public Set<User> selectAll() {
         return users;
     }
 
     @Override
     protected Class getEntityClass() {
         return User.class;
-    }
-
-    @Override
-    public String getView(User user) {
-        return user.getLogin();
     }
 }

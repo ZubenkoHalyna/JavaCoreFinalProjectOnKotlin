@@ -1,6 +1,8 @@
 package entities;
 
-public class Hotel extends BaseEntity {
+import java.io.Serializable;
+
+public class Hotel extends BaseEntity implements Serializable {
     public enum Fields {ID, NAME, CITY}
     private String name;
     private String city;
@@ -9,6 +11,11 @@ public class Hotel extends BaseEntity {
         super(id);
         this.name = name;
         this.city = city;
+    }
+
+    @Override
+    public String toString() {
+        return name+", "+city;
     }
 
     public String getName() {

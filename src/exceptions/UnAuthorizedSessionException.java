@@ -5,6 +5,6 @@ package exceptions;
  */
 public class UnAuthorizedSessionException extends Exception {
     public UnAuthorizedSessionException() {
-        super("Sorry, You should log in first!");
+        super("You should log in first!");
     }
 }

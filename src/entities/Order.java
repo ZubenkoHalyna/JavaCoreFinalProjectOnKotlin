@@ -1,22 +1,27 @@
 package entities;
 
-
+import utils.DateUtil;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by g.zubenko on 23.01.2017.
  */
-public class Order extends BaseEntity implements Comparable<Order>{
-    public enum Fields {ID, USER_ID, ROOM_ID, START_DATE, END_DATE}
+public class Order extends BaseEntity implements Comparable<Order>, Serializable {
+    public enum Fields {ID, USER_ID, ROOM_ID, START_DATE, END_DATE, }
     private long userId;
+    private transient User cacheUser;
     private long roomId;
+    private transient Room cacheRoom;
     private Date startReservationDate;
     private Date endReservationDate;
 
-    public Order(long id, long userId, long roomId, Date startReservationDate, Date endReservationDate) {
+    public Order(long id, User user, Room room, Date startReservationDate, Date endReservationDate) {
         super(id);
-        this.userId = userId;
-        this.roomId = roomId;
+        this.userId = user.getId();
+        this.cacheUser = user;
+        this.roomId = room.getId();
+        this.cacheRoom = room;
         this.startReservationDate = startReservationDate;
         this.endReservationDate = endReservationDate;
     }
@@ -33,20 +38,37 @@ public class Order extends BaseEntity implements Comparable<Order>{
         return 1;
     }
 
+    @Override
+    public String toString() {
+        return cacheRoom+", from "+
+                DateUtil.dateToStr(startReservationDate)+ " to "+
+                DateUtil.dateToStr(endReservationDate);
+    }
+
     public long getUserId() {
         return userId;
     }
 
-    public void setUserId(long userId) {
-        this.userId = userId;
+    public User getUser(User user) {
+        return cacheUser;
+    }
+
+    public void setUser(User user) {
+        userId = user.getId();
+        cacheUser = user;
     }
 
     public long getRoomId() {
         return roomId;
     }
 
-    public void setRoomId(long roomId) {
-        this.roomId = roomId;
+    public Room getRoom() {
+        return cacheRoom;
+    }
+
+    public void setRoom(Room room) {
+        roomId = room.getId();
+        cacheRoom = room;
     }
 
     public Date getStartReservationDate() {

@@ -52,6 +52,7 @@ public class Menu {
             case 6: viewOrders(); break;
             case 7: close(); break;
         }
+        //TODO press enter to continue only there
     }
 
     private void register() {
@@ -122,6 +123,11 @@ public class Menu {
         User user;
         try {
             user = getRegisteredUser();
+            if (session.isNew()){
+                System.out.println();
+                IOUtil.printCollection("Rooms",false,rooms);
+                session.setNew(false);
+            }
         }
         catch (UnAuthorizedSessionException e){
             return;
@@ -138,7 +144,7 @@ public class Menu {
             IOUtil.informUser("Registered order: "+order.toString());
         }
         else{
-            IOUtil.informUser("Sorry, room has already reserved");
+            IOUtil.informUser("Room has already reserved");
         }
     }
 
@@ -146,13 +152,17 @@ public class Menu {
         User user;
         try {
             user = getRegisteredUser();
+            if (session.isNew()){
+                System.out.println();
+                session.setNew(false);
+            }
         } catch (UnAuthorizedSessionException e) {
             return;
         }
         ArrayList<Order> orders = new ArrayList<>(controller.findOrdersByUser(user));
         Collections.sort(orders);
 
-        IOUtil.printCollection("Your orders", "You haven't made any orders yet", false, orders);
+        IOUtil.printCollection("Your orders", "You haven't made any orders yet", true, orders);
         if (!orders.isEmpty()) {
             IOUtil.askToContinue("Would you like to cancel reservation?", this::cancelReservation, orders);
         }
