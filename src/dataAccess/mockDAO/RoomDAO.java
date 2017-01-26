@@ -101,6 +101,6 @@ class RoomDAO extends DAO<Room>{
     public String getView(Room room) {
         return getHotelDAO().getById(room.getHotelId()).getView()+", "+
                 room.getPrice()+"$ per day, "+
-                room.getPersons()+"person"+((room.getPersons()==1)?"":"s");
+                room.getPersons()+" person"+((room.getPersons()==1)?"":"s");
     }
 }

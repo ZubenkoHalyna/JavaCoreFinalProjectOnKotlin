@@ -1,6 +1,5 @@
 package utils;
 
-import entities.BaseEntity;
 import entities.FieldType;
 import exceptions.InputWasSkippedException;
 import exceptions.StringToDateConvertingException;
@@ -19,7 +18,7 @@ import java.util.function.Consumer;
  * Created by g.zubenko on 26.01.2017.
  */
 public final class IOUtil {
-    static final private String IOExceptionMsg = "Sorry. Input failed. System error occur.";
+    static final private String IOExceptionMsg = "Input failed.";
     static final private BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
     static public String readString(String stringDescription){
@@ -54,15 +53,13 @@ public final class IOUtil {
         }
     }
 
-    static public void pressAnyKeyToContinue()
-    {
-        System.out.println("Press any key to continue...");
-        try
-        {
-            System.in.read();
+    static public void pressEnterToContinue() {
+        System.out.print("Press enter to continue...");
+        try {
+            consoleReader.readLine();
+        } catch (IOException e) {
+            System.out.println(IOExceptionMsg);
         }
-        catch(Exception e)
-        {}
     }
 
     static public long readLong(String description, boolean notEmpty, boolean informUser) {
@@ -105,11 +102,21 @@ public final class IOUtil {
         return value;
     }
 
-    static public Date readFutureDate(String description, boolean notEmpty){
-        return readFutureDate( description, notEmpty, !notEmpty);
+    static public Date readDate(String description, boolean notEmpty){
+        Date currentDate = new Date();
+        return readDate(description, currentDate, notEmpty, !notEmpty);
     }
 
-    static public Date readFutureDate(String description, boolean notEmpty, boolean informUser) {
+    static public Date readDate(String description, boolean notEmpty, Date dateAfter){
+        return readDate(description, dateAfter, notEmpty, !notEmpty);
+    }
+
+    static public Date readDate(String description, boolean notEmpty, boolean informUser){
+        Date currentDate = new Date();
+        return readDate(description, currentDate, notEmpty, informUser);
+    }
+
+    static public Date readDate(String description, Date dateAfter, boolean notEmpty, boolean informUser) {
         String stringValue = readString(description, notEmpty, informUser);
         if (stringValue.isEmpty()) {
             throw new InputWasSkippedException(description);
@@ -119,15 +126,14 @@ public final class IOUtil {
             value = DateUtil.stringToDate(stringValue);
         } catch (StringToDateConvertingException e) {
             System.out.println(description + " should be a date in format dd.mm.yyyy. Try input again.");
-            return readFutureDate(description,notEmpty, informUser);
+            return readDate(description, dateAfter, notEmpty, informUser);
         }
-        Date currentDate =new Date();
-        if (value.before(currentDate)) {
-            System.out.println(description + " should be after " +
-                    DateUtil.dateToStr(currentDate) + ". Try input again.");
-            return readFutureDate(description,notEmpty, informUser);
-        } else {
+        if (value.after(dateAfter)) {
             return value;
+        } else {
+            System.out.println(description + " should be after " +
+                    DateUtil.dateToStr(dateAfter) + ". Try input again.");
+            return readDate(description, dateAfter, notEmpty, informUser);
         }
     }
 
@@ -149,7 +155,7 @@ public final class IOUtil {
                 return readString(description, true, true);
             case DATE:
                 try {
-                    return DateUtil.dateToStr(readFutureDate(description, true, true));
+                    return DateUtil.dateToStr(readDate(description, true, true));
                 } catch (InputWasSkippedException e) {
                     return "";
                 }
@@ -158,22 +164,46 @@ public final class IOUtil {
         }
     }
 
-    static public <T extends BaseEntity> void printCollection(String itemDescription, boolean waitForUser, Collection<T> c){
+    static public void askToContinue(String question, Operator operator){
+        System.out.print(question+" (Y - yes/N - no) ");
+        try {
+            String s = IOUtil.consoleReader.readLine();
+            if (!s.isEmpty() && (s.charAt(0)=='y' || s.charAt(0)=='Y')){
+                operator.execute();
+            }
+        } catch (IOException e){
+            System.out.println(IOExceptionMsg);
+        }
+    }
+
+    static public <T> void askToContinue(String question, Consumer<ArrayList<T>> consumer, ArrayList<T> param) {
+        System.out.print(question+" (Y - yes/N - no) ");
+        try {
+            String s = consoleReader.readLine();
+            if (!s.isEmpty() && (s.charAt(0)=='y' || s.charAt(0)=='Y')){
+                consumer.accept(param);
+            }
+        } catch (IOException e){
+            System.out.println(IOExceptionMsg);
+        }
+    }
+
+
+    static public <T> void printCollection(String itemDescription, boolean waitForUser, Collection<T> c){
         printCollection(itemDescription + " on your request",
-                "There no "+itemDescription + " on your request:",
+                "There no "+itemDescription + " on your request.",
                 waitForUser,
                 c);
     }
 
-    static public <T extends BaseEntity> void printCollection(String itemDescription, Collection<T> c){
+    static public <T> void printCollection(String itemDescription, Collection<T> c){
         printCollection(itemDescription, true, c);
     }
 
-    static public <T extends BaseEntity> void printCollection(String description, String msgIfEmpty,
-                                                        boolean waitForUser, Collection<T> c) {
+    static public <T> void printCollection(String description, String msgIfEmpty,
+                                                              boolean waitForUser, Collection<T> c) {
         if (c.isEmpty()) {
             System.out.println(msgIfEmpty);
-            pressAnyKeyToContinue();
         } else {
             System.out.println(description + ":");
             int elementNumber = 0;
@@ -182,37 +212,30 @@ public final class IOUtil {
                 System.out.format("%2d %s \n", ++elementNumber, iterator.next());
             }
         }
-        if (waitForUser) pressAnyKeyToContinue();
+        if (waitForUser) pressEnterToContinue();
     }
 
-    static public void askToContinue(Operator operator){
-        System.out.print(" (Y - yes/N - no) ");
-        try {
-            String s = IOUtil.consoleReader.readLine();
-            if (!s.isEmpty() && (s.charAt(0)=='y' || s.charAt(0)=='Y')){
-                operator.execute();
-            }
-            else{
-                System.out.println();
-            }
-        } catch (IOException e){
-            System.out.println(IOExceptionMsg);
-            askToContinue(operator);
+    static public void informUser(String information) {
+        informUser(information, true);
+    }
+
+    static public void informUser(String information, boolean waitForUser) {
+        if (waitForUser) {
+            System.out.println(information);
+            pressEnterToContinue();
+        }else{
+            System.out.println(information);
         }
     }
 
-    static public <T> void askToContinue(Consumer<ArrayList<T>> consumer, ArrayList<T> param) {
-        try {
-            String s = consoleReader.readLine();
-            if (!s.isEmpty() && (s.charAt(0)=='y' || s.charAt(0)=='Y')){
-                consumer.accept(param);
-            }
-            else{
-                System.out.println();
-            }
-        } catch (IOException e){
-            System.out.println(IOExceptionMsg);
-            askToContinue(consumer, param);
-        }
+    static public void informUserAndAskToContinue(String information, String question, Operator operator) {
+        System.out.print(information+" ");
+        askToContinue(question, operator);
+    }
+
+    static public <T> void informUserAndAskToContinue(String information, String question,
+                                                      Consumer<ArrayList<T>> consumer, ArrayList<T> param) {
+        System.out.print(information+" ");
+        askToContinue(question, consumer, param);
     }
 }

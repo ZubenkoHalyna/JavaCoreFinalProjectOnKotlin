@@ -6,20 +6,20 @@ public class Room extends BaseEntity {
     public enum Fields {
         ID(                 false, LONG,  "id"),
         PRICE(              true,  INT,   "price per day"),
-        PRICE_VARIATION(    true,  INT,   "acceptable price variation in percents"),
+        PRICE_VARIATION(    false, INT,   "acceptable price variation in percents"),
         NUMBER_OF_PERSONS(  true,  INT,   "number of persons"),
         HOTEL_ID(           false, LONG,  "hotel id"),
         CITY(               true,  STRING,"city"),
         START_DATE(         true,  DATE,  "start date of reservation"),
-        END_DATE(           true,  DATE,  "end date of reservation");
+        END_DATE(           false, DATE,  "end date of reservation");
 
         public final String description;
-        public final boolean forUser;
+        public final boolean directForUser;
         public final FieldType type;
 
-        Fields(boolean forUser, FieldType type, String description) {
+        Fields(boolean directForUser, FieldType type, String description) {
             this.description = description;
-            this.forUser = forUser;
+            this.directForUser = directForUser;
             this.type = type;
         }
     }
