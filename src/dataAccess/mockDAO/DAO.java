@@ -4,6 +4,7 @@ import dataAccess.DAOInterface;
 import entities.BaseEntity;
 import exceptions.EntityNotFoundById;
 import exceptions.TryToDeleteNonExistentEntity;
+import exceptions.TryToInsertExistentEntity;
 import exceptions.TryToUpdateNonExistentEntity;
 
 import java.util.Map;
@@ -29,26 +30,34 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
         return filter(params).findFirst();
     }
 
-    public void insert(T item){
-        getStorage().add(item);
-        item.setView(getView(item));
+    public boolean insert(T item){
+        Set<T> storage = getStorage();
+        if (storage.contains(item)) {
+            throw new TryToInsertExistentEntity(item);
+        }else{
+            getStorage().add(item);
+            item.setView(getView(item));
+            return true;
+        }
     }
 
-    public void update(T item){
+    public boolean update(T item){
         Set<T> storage = getStorage();
         if (storage.contains(item)){
             storage.add(item);
             item.setView(getView(item));
+            return true;
         }
         else {
             throw new TryToUpdateNonExistentEntity(item);
         }
     }
 
-    public void delete(T item){
+    public boolean delete(T item){
         Set<T> storage = getStorage();
         if (storage.contains(item)){
             storage.remove(item);
+            return true;
         }
         else {
             throw new TryToDeleteNonExistentEntity(item);

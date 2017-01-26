@@ -31,8 +31,9 @@ class HotelDAO extends DAO<Hotel> {
             hotelStream = hotelStream.filter(h -> h.getId() == castedId);
         }
 
-        if (!(name == null || name.isEmpty())) {
-            hotelStream = hotelStream.filter(h -> h.getName().equalsIgnoreCase(name));
+        if (!(name == null || name.isEmpty()) && name.length()>=3) {
+            final String lowerCaseName = name.toLowerCase();
+            hotelStream = hotelStream.filter(h -> h.getName().toLowerCase().contains(lowerCaseName));
         }
 
         if (!(city == null || city.isEmpty())) {

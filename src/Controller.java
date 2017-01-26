@@ -45,6 +45,7 @@ public class Controller {
     }
 
     public Collection<Room> findRoom(Map<String, String> params){
+
         return DAOProvider.getRoomDAO().select(params);
     }
 
@@ -71,18 +72,6 @@ public class Controller {
         else {
             return Optional.empty();
         }
-    }
-
-    public List<String> getRoomSearchFields() {
-        Room.Fields[] fields = Room.Fields.values();
-        List<String> buf = new ArrayList<>();
-        for (Room.Fields field : fields) {
-            String fieldName = field.toString();
-            if (! fieldName.contains("ID")){
-                buf.add(fieldName);
-            }
-        }
-        return buf;
     }
 
     public Order registerOrder(User user, Room room, Date startDate, Date endDate){

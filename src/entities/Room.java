@@ -1,7 +1,29 @@
 package entities;
 
+import static entities.FieldType.*;
+
 public class Room extends BaseEntity {
-    public enum Fields {ID, PRICE, PERSONS, HOTEL_ID, CITY, START_DATE, END_DATE}
+    public enum Fields {
+        ID(                 false, LONG,  "id"),
+        PRICE(              true,  INT,   "price per day"),
+        PRICE_VARIATION(    true,  INT,   "acceptable price variation in percents"),
+        NUMBER_OF_PERSONS(  true,  INT,   "number of persons"),
+        HOTEL_ID(           false, LONG,  "hotel id"),
+        CITY(               true,  STRING,"city"),
+        START_DATE(         true,  DATE,  "start date of reservation"),
+        END_DATE(           true,  DATE,  "end date of reservation");
+
+        public final String description;
+        public final boolean forUser;
+        public final FieldType type;
+
+        Fields(boolean forUser, FieldType type, String description) {
+            this.description = description;
+            this.forUser = forUser;
+            this.type = type;
+        }
+    }
+
     private int price;
     private int persons;
     private long hotelId;

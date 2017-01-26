@@ -6,17 +6,13 @@ import exceptions.EntityNotFoundById;
 import exceptions.StringToDateConvertingException;
 import utils.DateUtil;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 18.01.2017.
  */
 class RoomDAO extends DAO<Room>{
-    final double PRICE_VARIATION = 0.2;
     private static Set<Room> rooms = new HashSet<>();
 
     @Override
@@ -28,7 +24,8 @@ class RoomDAO extends DAO<Room>{
     public Stream<Room> filter(Map<String, String> params) {
         String id = params.get(Room.Fields.ID.toString());
         String price = params.get(Room.Fields.PRICE.toString());
-        String persons = params.get(Room.Fields.PERSONS.toString());
+        String priceVariation = params.get(Room.Fields.PRICE_VARIATION.toString());
+        String persons = params.get(Room.Fields.NUMBER_OF_PERSONS.toString());
         String hotelId = params.get(Room.Fields.HOTEL_ID.toString());
         String city = params.get(Room.Fields.CITY.toString());
         String startDate = params.get(Room.Fields.START_DATE.toString());
@@ -43,9 +40,14 @@ class RoomDAO extends DAO<Room>{
 
         if (!(price == null || price.isEmpty())) {
             long castedPrice = Long.parseLong(price);
+            final int castedPriceVariation =
+                    (priceVariation == null || priceVariation.isEmpty())
+                    ? 0
+                    : Integer.parseInt(priceVariation);
+
             roomStream = roomStream.filter(r ->
-                    r.getPrice() >= castedPrice * (1 - PRICE_VARIATION) &&
-                            r.getPrice() <= castedPrice * (1 + PRICE_VARIATION));
+                    r.getPrice() >= castedPrice * (1 - castedPriceVariation/100.0) &&
+                            r.getPrice() <= castedPrice * (1 + castedPriceVariation/100.0));
         }
 
         if (!(persons == null || persons.isEmpty())) {

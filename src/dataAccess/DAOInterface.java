@@ -10,7 +10,7 @@ import java.util.Set;
 public interface DAOInterface<T> {
     Set<T> select(Map<String,String> params);
     Optional<T> selectFirst(Map<String,String> params);
-    void insert(T item);
-    void update(T item);
-    void delete(T item);
+    boolean insert(T item);
+    boolean update(T item);
+    boolean delete(T item);
 }
