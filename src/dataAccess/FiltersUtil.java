@@ -144,7 +144,7 @@ public final class FiltersUtil {
             }
         }
 
-        return roomStream.distinct();
+        return roomStream.sorted().distinct();
     }
 
     public static boolean orderExists(Room room, Date startDate, Date endDate, DAOInterface<Order> orderDAO){
