@@ -3,25 +3,35 @@ package dataAccess.saveInFileDAO;
 import dataAccess.FiltersUtil;
 import entities.Hotel;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 26.01.2017.
  */
 class HotelDAO extends DAO<Hotel>  {
-    private Set<Hotel> cache = new HashSet<>();
-
-    @Override
-    Set<Hotel> getCache() {
-        return cache;
-    }
+    private List<Hotel> cache = new ArrayList<>();
 
     @Override
     protected Class getEntityClass() {
         return Hotel.class;
+    }
+
+    @Override
+    void setTransientValuesForEntitiesInCache() {
+       // there no transient values in class Hotel
+    }
+
+    @Override
+    List<Hotel> getCache() {
+        return cache;
+    }
+
+    @Override
+    void setCache(List<Hotel> cache) {
+        this.cache = cache;
     }
 
     @Override

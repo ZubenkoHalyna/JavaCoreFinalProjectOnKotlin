@@ -3,19 +3,19 @@ package dataAccess.mockDAO;
 import dataAccess.FiltersUtil;
 import entities.Order;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 23.01.2017.
  */
 class OrderDAO extends DAO<Order>{
-    private static Set<Order> orders = new HashSet<>();
+    private static List<Order> orders = new ArrayList<>();
 
     @Override
-    public Set<Order> selectAll() {
+    public List<Order> selectAll() {
         return orders;
     }
 

@@ -2,12 +2,12 @@ package dataAccess.saveInFileDAO;
 
 import dataAccess.DAOInterface;
 import entities.BaseEntity;
+import exceptions.EntityNotFoundById;
+import exceptions.ReadFromDBException;
+import exceptions.WriteToDBException;
 
 import java.io.*;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,97 +15,102 @@ import java.util.stream.Stream;
  * Created by g.zubenko on 26.01.2017.
  */
 abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
-    abstract public Stream<T> filter(Map<String,String> params);
-    abstract Set<T> getCache();
-    abstract protected Class getEntityClass();
+    abstract Stream<T> filter(Map<String, String> params);
+    abstract List<T> getCache();
+    abstract Class getEntityClass();
+    abstract void setTransientValuesForEntitiesInCache();
+    abstract void setCache(List<T> cache);
 
-    void setCacheValues(Set<T> items) {}
-
-    public Set<T> readFromFile() {
-        Set<T> cache = getCache();
-        if (cache.isEmpty()) {
-            Set<T> items = new HashSet<T>();
-            File file = new File(getEntityClass().getSimpleName() + ".dat");
-            if (file.exists()) {
-                try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(
-                        new FileInputStream(file.getAbsolutePath())))) {
-                    items = (Set) in.readObject();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            setCacheValues(items);
-            return items;
-        }
-        else{
-            return cache;
-        }
+    @Override
+    public List<T> selectAll(){
+        return getCacheOrReadDataFromDB();
     }
 
-    public Set<T> selectAll(){
-        return readFromFile();
-    }
-
-    void setCache(Set<T> cache){
-        Set<T> buf = getCache();
-        buf = cache;
-    }
-
+    @Override
     public Optional<T> selectFirst(Map<String,String> params){
         return filter(params).findFirst();
     }
 
-    public Set<T> select(Map<String,String> params){
-        return filter(params).collect(Collectors.toSet());
+    @Override
+    public List<T> select(Map<String,String> params){
+        return filter(params).collect(Collectors.toList());
     }
 
+    @Override
     public boolean insert(T item) {
-        Set<T> set = readFromFile();
-        set.add(item);
-        insertAll(set);
+        getCacheOrReadDataFromDB().add(item);
+        return writeCacheToFile();
+    }
+
+    @Override
+    public boolean insertAll(Collection<T> items) {
+        getCacheOrReadDataFromDB().addAll(items);
+        return writeCacheToFile();
+    }
+
+    public boolean update(T item) {
+        getCacheOrReadDataFromDB().remove(item);
+        return writeCacheToFile();
+    }
+
+    public boolean delete(T item){
+        getCacheOrReadDataFromDB().remove(item);
+        return writeCacheToFile();
+    }
+
+    public T getById(long id) {
+        Optional<T> item = getCacheOrReadDataFromDB().stream().filter(i->i.getId()==id).findFirst();
+        if (item.isPresent()){
+            return item.get();
+        }
+        throw new EntityNotFoundById(getEntityClass(),id);
+    }
+
+    public List<T> getCacheOrReadDataFromDB(){
+        List<T> cache = getCache();
+        if (cache.isEmpty()){
+            readCacheFromFile();
+            cache = getCache();
+        }
+        return cache;
+    }
+
+    boolean readCacheFromFile() {
+        ArrayList<T> items;
+        File file = new File(getEntityClass().getSimpleName() + ".dat");
+        if (file.exists()) {
+            try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(
+                    new FileInputStream(file.getAbsolutePath())))) {
+                items = (ArrayList) in.readObject();
+            } catch (Exception ex) {
+                throw new ReadFromDBException(file,ex);
+            }
+        }
+        else {
+            throw new ReadFromDBException(file);
+        }
+        setCache(items);
+        setTransientValuesForEntitiesInCache();
         return true;
     }
 
-    public boolean insertAll(Set<T> items) {
-        setCache(items);
-        File file;
+    boolean writeCacheToFile(){
+        File file = new File(getEntityClass().getSimpleName() + ".dat");
         try {
-            file = new File(getEntityClass().getSimpleName() + ".dat");
             if (!file.exists()) {
                 file.createNewFile();
                 System.out.println("File '" + file.getAbsolutePath() + "' was created");
             }
             try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(
                     new FileOutputStream(file.getAbsolutePath())))) {
-                out.writeObject(items);
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
+                out.writeObject(getCache());
+                return true;
+            } catch (IOException ex) {
+                throw new WriteToDBException(file);
             }
         } catch (IOException e) {
+            throw  new WriteToDBException(file);
         }
-        return true;
-    }
-
-    public boolean update(T item) {
-        //TODO
-        return true;
-    }
-
-    public boolean delete(T item){
-        Set<T> set = readFromFile();
-        set.remove(item);
-        insertAll(set);
-        return true;
-    }
-
-    public T getById(long id) {
-        Optional<T> item = readFromFile().stream().filter(i->i.getId()==id).findFirst();
-        if (item.isPresent()){
-            return item.get();
-        }
-        //TODO
-        return null;
     }
 
     protected HotelDAO getHotelDAO(){

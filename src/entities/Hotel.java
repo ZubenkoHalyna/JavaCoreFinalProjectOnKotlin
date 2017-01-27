@@ -3,12 +3,11 @@ package entities;
 import java.io.Serializable;
 
 public class Hotel extends BaseEntity implements Serializable {
-    public enum Fields {ID, NAME, CITY}
+    public enum FieldsForSearch {ID, NAME, CITY}
     private String name;
     private String city;
 
-    public Hotel(long id, String name, String city) {
-        super(id);
+    public Hotel(String name, String city) {
         this.name = name;
         this.city = city;
     }

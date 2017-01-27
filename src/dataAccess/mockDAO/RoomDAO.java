@@ -3,19 +3,17 @@ package dataAccess.mockDAO;
 import dataAccess.FiltersUtil;
 import entities.Room;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 18.01.2017.
  */
 class RoomDAO extends DAO<Room>{
-    private static Set<Room> rooms = new HashSet<>();
+    private static List<Room> rooms = new ArrayList<>();
 
     @Override
-    public Set<Room> selectAll() {
+    public List<Room> selectAll() {
         return rooms;
     }
 

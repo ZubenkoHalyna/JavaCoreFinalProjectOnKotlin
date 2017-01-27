@@ -3,21 +3,14 @@ package dataAccess.saveInFileDAO;
 import dataAccess.FiltersUtil;
 import entities.Order;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 26.01.2017.
  */
 class OrderDAO extends DAO<Order> {
-    private Set<Order> cache = new HashSet<>();
-
-    @Override
-    Set<Order> getCache() {
-        return cache;
-    }
+    private List<Order> cache = new ArrayList<>();
 
     @Override
     protected Class getEntityClass() {
@@ -30,10 +23,20 @@ class OrderDAO extends DAO<Order> {
     }
 
     @Override
-    void setCacheValues(Set<Order> orders){
-        for (Order order : orders) {
+    void setTransientValuesForEntitiesInCache(){
+        for (Order order : cache) {
             order.setRoom(getRoomDAO().getById(order.getRoomId()));
             order.setUser(getUserDAO().getById(order.getUserId()));
         }
+    }
+
+    @Override
+    List<Order> getCache() {
+        return cache;
+    }
+
+    @Override
+    void setCache(List<Order> cache) {
+        this.cache = cache;
     }
 }

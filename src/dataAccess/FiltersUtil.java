@@ -15,9 +15,9 @@ import java.util.stream.Stream;
  */
 public final class FiltersUtil {
     public static Stream<Hotel> filterHotels(Map<String,String> params, DAOInterface<Hotel> hotelDAO) {
-        String id = params.get(Hotel.Fields.ID.toString());
-        String name = params.get(Hotel.Fields.NAME.toString());
-        String city = params.get(Hotel.Fields.CITY.toString());
+        String id = params.get(Hotel.FieldsForSearch.ID.toString());
+        String name = params.get(Hotel.FieldsForSearch.NAME.toString());
+        String city = params.get(Hotel.FieldsForSearch.CITY.toString());
 
         Stream<Hotel> hotelStream = hotelDAO.selectAll().stream();
 
@@ -39,11 +39,11 @@ public final class FiltersUtil {
     }
 
     public static Stream<Order> filterOrders(Map<String, String> params, DAOInterface<Order> orderDAO) {
-        String id = params.get(Order.Fields.ID.toString());
-        String roomId = params.get(Order.Fields.ROOM_ID.toString());
-        String userId = params.get(Order.Fields.USER_ID.toString());
-        String startDate = params.get(Order.Fields.START_DATE.toString());
-        String endDate = params.get(Order.Fields.END_DATE.toString());
+        String id = params.get(Order.FieldsForSearch.ID.toString());
+        String roomId = params.get(Order.FieldsForSearch.ROOM_ID.toString());
+        String userId = params.get(Order.FieldsForSearch.USER_ID.toString());
+        String startDate = params.get(Order.FieldsForSearch.START_DATE.toString());
+        String endDate = params.get(Order.FieldsForSearch.END_DATE.toString());
 
         Stream<Order> orderStream = orderDAO.selectAll().stream();
 
@@ -84,14 +84,14 @@ public final class FiltersUtil {
     }
 
     public static Stream<Room> filterRooms(Map<String, String> params, DAOInterface<Room> roomDAO, DAOInterface<Order> orderDAO) {
-        String id = params.get(Room.Fields.ID.toString());
-        String price = params.get(Room.Fields.PRICE.toString());
-        String priceVariation = params.get(Room.Fields.PRICE_VARIATION.toString());
-        String persons = params.get(Room.Fields.NUMBER_OF_PERSONS.toString());
-        String hotelId = params.get(Room.Fields.HOTEL_ID.toString());
-        String city = params.get(Room.Fields.CITY.toString());
-        String startDate = params.get(Room.Fields.START_DATE.toString());
-        String endDate = params.get(Room.Fields.END_DATE.toString());
+        String id = params.get(Room.FieldsForSearch.ID.toString());
+        String price = params.get(Room.FieldsForSearch.PRICE.toString());
+        String priceVariation = params.get(Room.FieldsForSearch.PRICE_VARIATION.toString());
+        String persons = params.get(Room.FieldsForSearch.NUMBER_OF_PERSONS.toString());
+        String hotelId = params.get(Room.FieldsForSearch.HOTEL_ID.toString());
+        String city = params.get(Room.FieldsForSearch.CITY.toString());
+        String startDate = params.get(Room.FieldsForSearch.START_DATE.toString());
+        String endDate = params.get(Room.FieldsForSearch.END_DATE.toString());
 
         Stream<Room> roomStream = roomDAO.selectAll().stream();
 
@@ -126,6 +126,7 @@ public final class FiltersUtil {
             roomStream = roomStream.filter(r -> r.getHotel().getCity().equalsIgnoreCase(city));
         }
 
+        //Catch if room is free during the period of time
         if (!(startDate == null || startDate.isEmpty())) {
             try {
                 Date castedStartDate = DateUtil.stringToDate(startDate);
@@ -136,14 +137,14 @@ public final class FiltersUtil {
                     castedEndDate = new Date(castedStartDate.getTime());
                 }
                 Map<String,String> emptyParams = new HashMap<>();
-                Set<Order> allOrders = orderDAO.select(emptyParams);
+                List<Order> allOrders = orderDAO.select(emptyParams);
                 roomStream = roomStream.filter(room -> !(orderExists(room, castedStartDate, castedEndDate, orderDAO)));
             } catch (StringToDateConvertingException e) {
                 System.err.print(e.getMessage());
             }
         }
 
-        return roomStream;
+        return roomStream.distinct();
     }
 
     public static boolean orderExists(Room room, Date startDate, Date endDate, DAOInterface<Order> orderDAO){
@@ -160,9 +161,9 @@ public final class FiltersUtil {
     }
 
     public static Stream<User> filterUsers(Map<String, String> params, DAOInterface<User> userDAO) {
-        String id = params.get(User.Fields.ID.toString());
-        String login = params.get(User.Fields.LOGIN.toString());
-        String password = params.get(User.Fields.PASSWORD.toString());
+        String id = params.get(User.FieldsForSearch.ID.toString());
+        String login = params.get(User.FieldsForSearch.LOGIN.toString());
+        String password = params.get(User.FieldsForSearch.PASSWORD.toString());
 
         Stream<User> userStream = userDAO.selectAll().stream();
 

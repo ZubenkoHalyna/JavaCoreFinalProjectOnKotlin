@@ -3,16 +3,14 @@ package dataAccess.mockDAO;
 import dataAccess.FiltersUtil;
 import entities.User;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by ssizov on 17.01.2017.
  */
 class UserDAO extends DAO<User> {
-    private static Set<User> users = new HashSet<>();
+    private static List<User> users = new ArrayList<>();
 
     @Override
     public Stream<User> filter(Map<String, String> params) {
@@ -20,7 +18,7 @@ class UserDAO extends DAO<User> {
     }
 
     @Override
-    public Set<User> selectAll() {
+    public List<User> selectAll() {
         return users;
     }
 

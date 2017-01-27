@@ -1,12 +1,20 @@
 package entities;
 
+import dataAccess.identification.IdSupplier;
+import dataAccess.identification.UuIdSupplier;
+
 import java.io.Serializable;
 
 /**
  * Created by g.zubenko on 23.01.2017.
  */
 public abstract class BaseEntity implements Serializable {
+    static IdSupplier idProvider = UuIdSupplier.getInstance();
     private long id;
+
+    public BaseEntity() {
+        this.id = idProvider.getNewId();
+    }
 
     public BaseEntity(long id) {
         this.id = id;

@@ -8,10 +8,7 @@ import exceptions.UnsupportedFieldTypeException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -189,7 +186,7 @@ public final class IOUtil {
         }
     }
 
-    static public <T> void askToContinue(String question, Consumer<ArrayList<T>> consumer, ArrayList<T> param) {
+    static public <T> void askToContinue(String question, Consumer<List<T>> consumer, List<T> param) {
         System.out.print(question+" (Y - yes/N - no) ");
         try {
             String s = consoleReader.readLine();
@@ -246,7 +243,7 @@ public final class IOUtil {
     }
 
     static public <T> void informUserAndAskToContinue(String information, String question,
-                                                      Consumer<ArrayList<T>> consumer, ArrayList<T> param) {
+                                                      Consumer<List<T>> consumer, List<T> param) {
         System.out.print(information+" ");
         askToContinue(question, consumer, param);
     }

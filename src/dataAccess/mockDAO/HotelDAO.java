@@ -3,19 +3,17 @@ package dataAccess.mockDAO;
 import dataAccess.FiltersUtil;
 import entities.Hotel;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 16.01.2017.
  */
 class HotelDAO extends DAO<Hotel> {
-    private static Set<Hotel> hotels = new HashSet<>();
+    private static List<Hotel> hotels = new ArrayList<>();
 
     @Override
-    public Set<Hotel> selectAll() {
+    public List<Hotel> selectAll() {
         return hotels;
     }
 

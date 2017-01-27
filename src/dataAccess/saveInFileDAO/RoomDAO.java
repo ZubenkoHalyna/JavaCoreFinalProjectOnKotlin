@@ -3,21 +3,14 @@ package dataAccess.saveInFileDAO;
 import dataAccess.FiltersUtil;
 import entities.Room;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 26.01.2017.
  */
 class RoomDAO extends DAO<Room> {
-    private Set<Room> cache = new HashSet<>();
-
-    @Override
-    Set<Room> getCache() {
-        return cache;
-    }
+    private List<Room> cache = new ArrayList<>();
 
     @Override
     protected Class getEntityClass() {
@@ -30,9 +23,19 @@ class RoomDAO extends DAO<Room> {
     }
 
     @Override
-    void setCacheValues(Set<Room> rooms){
-        for (Room room : rooms) {
+    void setTransientValuesForEntitiesInCache(){
+        for (Room room : cache) {
             room.setHotel(getHotelDAO().getById(room.getHotelId()));
         }
+    }
+
+    @Override
+    List<Room> getCache() {
+        return cache;
+    }
+
+    @Override
+    void setCache(List<Room> cache) {
+        this.cache = cache;
     }
 }

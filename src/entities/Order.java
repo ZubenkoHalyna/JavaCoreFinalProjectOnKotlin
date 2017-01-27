@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by g.zubenko on 23.01.2017.
  */
 public class Order extends BaseEntity implements Comparable<Order>, Serializable {
-    public enum Fields {ID, USER_ID, ROOM_ID, START_DATE, END_DATE, }
+    public enum FieldsForSearch {ID, USER_ID, ROOM_ID, START_DATE, END_DATE, }
     private long userId;
     private transient User cacheUser;
     private long roomId;
@@ -16,8 +16,7 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
     private Date startReservationDate;
     private Date endReservationDate;
 
-    public Order(long id, User user, Room room, Date startReservationDate, Date endReservationDate) {
-        super(id);
+    public Order(User user, Room room, Date startReservationDate, Date endReservationDate) {
         this.userId = user.getId();
         this.cacheUser = user;
         this.roomId = room.getId();

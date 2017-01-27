@@ -82,7 +82,7 @@ public class Menu {
 
     private void findRoom() {
         Map<String, String> params = new HashMap<>();
-        for (Room.Fields field : Room.Fields.values()) {
+        for (Room.FieldsForSearch field : Room.FieldsForSearch.values()) {
             if (field.directForUser) {
                 String value = IOUtil.readFormattedString(field.type, field.description);
                 params.put(field.toString(), value);
@@ -97,16 +97,17 @@ public class Menu {
         }
     }
 
-    private void checkIndirectParams(Map<String, String> params, Room.Fields field, String value) {
-        if (field==Room.Fields.START_DATE && !value.isEmpty()){
+    private void checkIndirectParams(Map<String, String> params, Room.FieldsForSearch field, String value) {
+        if (field== Room.FieldsForSearch.START_DATE && !value.isEmpty()){
             try {String newValue = DateUtil.dateToStr(
-                    IOUtil.readDate(Room.Fields.END_DATE.description, true, DateUtil.stringToDate(value)));
-            params.put(Room.Fields.END_DATE.toString(), newValue);}
+                    IOUtil.readDate(Room.FieldsForSearch.END_DATE.description, true, DateUtil.stringToDate(value)));
+            params.put(Room.FieldsForSearch.END_DATE.toString(), newValue);}
             catch (InputWasSkippedException e){}
         }
-        if (field==Room.Fields.PRICE && !value.isEmpty()){
-            String newValue = IOUtil.readFormattedString(Room.Fields.PRICE_VARIATION.type, Room.Fields.PRICE_VARIATION.description);
-            params.put(Room.Fields.PRICE_VARIATION.toString(), newValue);
+        if (field== Room.FieldsForSearch.PRICE && !value.isEmpty()){
+            String newValue = IOUtil.readFormattedString(Room.FieldsForSearch.PRICE_VARIATION.type,
+                    Room.FieldsForSearch.PRICE_VARIATION.description);
+            params.put(Room.FieldsForSearch.PRICE_VARIATION.toString(), newValue);
         }
     }
 
@@ -119,7 +120,7 @@ public class Menu {
         }
     }
 
-    private void bookRoom(ArrayList<Room> rooms){
+    private void bookRoom(List<Room> rooms){
         User user;
         try {
             user = getRegisteredUser();
@@ -159,7 +160,7 @@ public class Menu {
         } catch (UnAuthorizedSessionException e) {
             return;
         }
-        ArrayList<Order> orders = new ArrayList<>(controller.findOrdersByUser(user));
+        List<Order> orders = controller.findOrdersByUser(user);
         Collections.sort(orders);
 
         IOUtil.printCollection("Your orders", "You haven't made any orders yet", true, orders);
@@ -168,15 +169,7 @@ public class Menu {
         }
     }
 
-    public void cancelReservation(ArrayList<Order> orders) {
-        /*TODO check of User
-        User user;
-        try {
-            user = getRegisteredUser();
-        } catch (UnAuthorizedSessionException e) {
-            return;
-        }*/
-
+    public void cancelReservation(List<Order> orders) {
         int numberOfRoom = IOUtil.readInt("number of the reservation", 1, orders.size()) - 1;
         controller.deleteOrder(orders.get(numberOfRoom));
         IOUtil.informUser("Reservation was canceled successfully!");
