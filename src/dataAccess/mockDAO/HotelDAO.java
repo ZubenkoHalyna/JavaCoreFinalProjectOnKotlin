@@ -12,6 +12,10 @@ import java.util.stream.Stream;
 class HotelDAO extends DAO<Hotel> {
     private static List<Hotel> hotels = new ArrayList<>();
 
+    public HotelDAO(MockDB DB) {
+        super(DB);
+    }
+
     @Override
     public List<Hotel> selectAll() {
         return hotels;

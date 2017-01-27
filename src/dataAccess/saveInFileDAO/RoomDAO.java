@@ -3,14 +3,24 @@ package dataAccess.saveInFileDAO;
 import dataAccess.FiltersUtil;
 import entities.Room;
 
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 26.01.2017.
  */
+@XmlRootElement
 class RoomDAO extends DAO<Room> {
+    @XmlElementWrapper
     private List<Room> cache = new ArrayList<>();
+
+    private RoomDAO(){}
+
+    public RoomDAO(FileBasedDB DB) {
+        super(DB);
+    }
 
     @Override
     protected Class getEntityClass() {

@@ -14,6 +14,10 @@ import java.util.stream.Stream;
 class OrderDAO extends DAO<Order>{
     private static List<Order> orders = new ArrayList<>();
 
+    public OrderDAO(MockDB DB) {
+        super(DB);
+    }
+
     @Override
     public List<Order> selectAll() {
         return orders;

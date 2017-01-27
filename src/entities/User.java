@@ -1,14 +1,15 @@
 package entities;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
-@XmlRootElement
 public class User extends BaseEntity  implements Serializable {
+
     public enum FieldsForSearch {ID, LOGIN, PASSWORD}
     private String login;
     private String password;
+
+    private User(){}
 
     public User(String login, String password) {
         this.login = login;
@@ -23,6 +24,7 @@ public class User extends BaseEntity  implements Serializable {
     public String getLogin() {
         return login;
     }
+
     @XmlElement
     public void setLogin(String login) {
         this.login = login;

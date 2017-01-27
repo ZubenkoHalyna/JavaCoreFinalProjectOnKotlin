@@ -3,14 +3,24 @@ package dataAccess.saveInFileDAO;
 import dataAccess.FiltersUtil;
 import entities.Order;
 
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 26.01.2017.
  */
+@XmlRootElement
 class OrderDAO extends DAO<Order> {
+    @XmlElementWrapper
     private List<Order> cache = new ArrayList<>();
+
+    private OrderDAO(){}
+
+    public OrderDAO(FileBasedDB DB) {
+        super(DB);
+    }
 
     @Override
     protected Class getEntityClass() {

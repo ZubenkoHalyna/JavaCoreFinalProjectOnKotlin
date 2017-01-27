@@ -3,6 +3,8 @@ package dataAccess.saveInFileDAO;
 import dataAccess.FiltersUtil;
 import entities.Hotel;
 
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +13,16 @@ import java.util.stream.Stream;
 /**
  * Created by g.zubenko on 26.01.2017.
  */
+@XmlRootElement
 class HotelDAO extends DAO<Hotel>  {
+    @XmlElementWrapper
     private List<Hotel> cache = new ArrayList<>();
+
+    private HotelDAO(){}
+
+    public HotelDAO(FileBasedDB DB) {
+        super(DB);
+    }
 
     @Override
     protected Class getEntityClass() {

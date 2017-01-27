@@ -12,6 +12,10 @@ import java.util.stream.Stream;
 class RoomDAO extends DAO<Room>{
     private static List<Room> rooms = new ArrayList<>();
 
+    public RoomDAO(MockDB DB) {
+        super(DB);
+    }
+
     @Override
     public List<Room> selectAll() {
         return rooms;

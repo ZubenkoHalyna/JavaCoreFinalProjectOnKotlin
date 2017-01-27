@@ -15,8 +15,13 @@ import java.util.stream.Stream;
  * Created by g.zubenko on 16.01.2017.
  */
 abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
+    private MockDB DB;
     abstract public Stream<T> filter(Map<String,String> params);
     abstract protected Class getEntityClass();
+
+    public DAO(MockDB DB) {
+        this.DB = DB;
+    }
 
     public List<T> select(Map<String,String> params){
         return filter(params).collect(Collectors.toList());
@@ -61,15 +66,15 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     }
 
     protected HotelDAO getHotelDAO(){
-        return new HotelDAO();
+        return DB.getHotelDAO();
     }
     protected RoomDAO getRoomDAO(){
-        return new RoomDAO();
+        return DB.getRoomDAO();
     }
     protected UserDAO getUserDAO(){
-        return new UserDAO();
+        return DB.getUserDAO();
     }
     protected OrderDAO getOrderDAO(){
-        return new OrderDAO();
+        return DB.getOrderDAO();
     }
 }

@@ -3,11 +3,11 @@ package dataAccess.saveInFileDAO;
 import dataAccess.DAOInterface;
 import entities.BaseEntity;
 import exceptions.EntityNotFoundById;
-import exceptions.ReadFromDBException;
-import exceptions.WriteToDBException;
 
-import java.io.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -15,11 +15,18 @@ import java.util.stream.Stream;
  * Created by g.zubenko on 26.01.2017.
  */
 abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
+    private FileBasedDB DB;
     abstract Stream<T> filter(Map<String, String> params);
     abstract List<T> getCache();
     abstract Class getEntityClass();
     abstract void setTransientValuesForEntitiesInCache();
     abstract void setCache(List<T> cache);
+
+    protected DAO(){}
+
+    public DAO(FileBasedDB DB) {
+        this.DB = DB;
+    }
 
     @Override
     public List<T> selectAll(){
@@ -76,53 +83,25 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     }
 
     boolean readCacheFromFile() {
-        ArrayList<T> items;
-        File file = new File(getEntityClass().getSimpleName() + ".dat");
-        if (file.exists()) {
-            try (ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(
-                    new FileInputStream(file.getAbsolutePath())))) {
-                items = (ArrayList) in.readObject();
-            } catch (Exception ex) {
-                throw new ReadFromDBException(file,ex);
-            }
-        }
-        else {
-            throw new ReadFromDBException(file);
-        }
-        setCache(items);
-        setTransientValuesForEntitiesInCache();
+        DB.getFileAccessObj().readCacheFromFile(this);
         return true;
     }
 
     boolean writeCacheToFile(){
-        File file = new File(getEntityClass().getSimpleName() + ".dat");
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-                System.out.println("File '" + file.getAbsolutePath() + "' was created");
-            }
-            try (ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(
-                    new FileOutputStream(file.getAbsolutePath())))) {
-                out.writeObject(getCache());
-                return true;
-            } catch (IOException ex) {
-                throw new WriteToDBException(file);
-            }
-        } catch (IOException e) {
-            throw  new WriteToDBException(file);
-        }
+        DB.getFileAccessObj().writeCacheToFile(this);
+        return true;
     }
 
     protected HotelDAO getHotelDAO(){
-        return new HotelDAO();
+        return DB.getHotelDAO();
     }
     protected RoomDAO getRoomDAO(){
-        return new RoomDAO();
+        return DB.getRoomDAO();
     }
     protected UserDAO getUserDAO(){
-        return new UserDAO();
+        return DB.getUserDAO();
     }
     protected OrderDAO getOrderDAO(){
-        return new OrderDAO();
+        return DB.getOrderDAO();
     }
 }

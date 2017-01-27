@@ -2,10 +2,6 @@ package dataAccess.mockDAO;
 
 import dataAccess.AbstractDB;
 import entities.InitialDataSupplier;
-import entities.Hotel;
-import entities.Order;
-import entities.Room;
-import entities.User;
 
 /**
  * Created by g.zubenko on 17.01.2017.
@@ -17,30 +13,30 @@ public class MockDB implements AbstractDB {
     private OrderDAO orderDAO;
 
     public MockDB() {
-        hotelDAO = new HotelDAO();
-        userDAO = new UserDAO();
-        roomDAO = new RoomDAO();
-        orderDAO = new OrderDAO();
+        hotelDAO = new HotelDAO(this);
+        userDAO = new UserDAO(this);
+        roomDAO = new RoomDAO(this);
+        orderDAO = new OrderDAO(this);
         Initialize();
     }
 
     @Override
-    public DAO<User> getUserDAO() {
+    public UserDAO getUserDAO() {
         return userDAO;
     }
 
     @Override
-    public DAO<Hotel> getHotelDAO() {
+    public HotelDAO getHotelDAO() {
         return hotelDAO;
     }
 
     @Override
-    public DAO<Room> getRoomDAO() {
+    public RoomDAO getRoomDAO() {
         return roomDAO;
     }
 
     @Override
-    public DAO<Order> getOrderDAO() {
+    public OrderDAO getOrderDAO() {
         return orderDAO;
     }
 

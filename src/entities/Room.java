@@ -1,10 +1,12 @@
 package entities;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 import static entities.FieldType.*;
 
-public class Room extends BaseEntity  implements Serializable {
+public class Room extends BaseEntity implements Serializable, Comparable<Room> {
     public enum FieldsForSearch {
         ID(                 false, LONG,  "id"),
         PRICE(              true,  INT,   "price per day"),
@@ -31,11 +33,25 @@ public class Room extends BaseEntity  implements Serializable {
     private long hotelId;
     private transient Hotel cacheHotel;
 
+    private Room(){}
+
     public Room(int price, int persons, Hotel hotel) {
         this.price = price;
         this.persons = persons;
         this.cacheHotel = hotel;
         this.hotelId = hotel.getId();
+    }
+
+    @Override
+    public int compareTo(Room r) {
+        if (equals(r)) return 0;
+        if (price>(r.getPrice())) {
+            return -1;
+        }
+        if (price==r.getPrice()){
+            return getId()>r.getId()? -1:1;
+        }
+        return 1;
     }
 
     @Override
@@ -64,13 +80,14 @@ public class Room extends BaseEntity  implements Serializable {
     public String toString() {
         return cacheHotel+", "+
                 price+" USD per day, "+
-                persons+" person"+((persons==1)?"":"s")+hashCode();
+                persons+" person"+((persons==1)?"":"s");
     }
 
     public int getPrice() {
         return price;
     }
 
+    @XmlElement
     public void setPrice(int price) {
         this.price = price;
     }
@@ -79,14 +96,17 @@ public class Room extends BaseEntity  implements Serializable {
         return persons;
     }
 
+    @XmlElement
     public void setPersons(int persons) {
         this.persons = persons;
     }
 
+    @XmlElement
     public long getHotelId() {
         return hotelId;
     }
 
+    @XmlTransient
     public void setHotel(Hotel hotel) {
         hotelId = hotel.getId();
         cacheHotel = hotel;

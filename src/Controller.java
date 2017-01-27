@@ -1,6 +1,5 @@
 import dataAccess.AbstractDB;
 import dataAccess.DAOInterface;
-import dataAccess.identification.IdSupplier;
 import entities.Hotel;
 import entities.Order;
 import entities.Room;
@@ -13,11 +12,9 @@ import java.util.*;
  * Created by g.zubenko on 16.01.2017.
  */
 public class Controller {
-    private final IdSupplier idProvider;
     private final AbstractDB DB;
 
-    public Controller(IdSupplier idProvider, AbstractDB DB) {
-        this.idProvider = idProvider;
+    public Controller(AbstractDB DB) {
         this.DB = DB;
     }
 
@@ -87,10 +84,6 @@ public class Controller {
 
     public void deleteOrder(Order order){
         DB.getOrderDAO().delete(order);
-    }
-
-    public IdSupplier getIdProvider() {
-        return idProvider;
     }
 
     public AbstractDB getDB() {

@@ -1,6 +1,9 @@
 package entities;
 
 import utils.DateUtil;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -9,12 +12,15 @@ import java.util.Date;
  */
 public class Order extends BaseEntity implements Comparable<Order>, Serializable {
     public enum FieldsForSearch {ID, USER_ID, ROOM_ID, START_DATE, END_DATE, }
+
     private long userId;
     private transient User cacheUser;
     private long roomId;
     private transient Room cacheRoom;
     private Date startReservationDate;
     private Date endReservationDate;
+
+    public Order(){}
 
     public Order(User user, Room room, Date startReservationDate, Date endReservationDate) {
         this.userId = user.getId();
@@ -32,7 +38,7 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
             return -1;
         }
         if (startReservationDate.equals(endReservationDate)){
-            return roomId>o.getId()? -1:1;
+            return getId()>o.getId()? -1:1;
         }
         return 1;
     }
@@ -44,6 +50,7 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
                 DateUtil.dateToStr(endReservationDate);
     }
 
+    @XmlElement
     public long getUserId() {
         return userId;
     }
@@ -57,6 +64,7 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
         cacheUser = user;
     }
 
+    @XmlElement
     public long getRoomId() {
         return roomId;
     }
@@ -65,6 +73,7 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
         return cacheRoom;
     }
 
+    @XmlTransient
     public void setRoom(Room room) {
         roomId = room.getId();
         cacheRoom = room;
@@ -74,6 +83,7 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
         return startReservationDate;
     }
 
+    @XmlElement
     public void setStartReservationDate(Date startReservationDate) {
         this.startReservationDate = startReservationDate;
     }
@@ -82,6 +92,7 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
         return endReservationDate;
     }
 
+    @XmlElement
     public void setEndReservationDate(Date endReservationDate) {
         this.endReservationDate = endReservationDate;
     }

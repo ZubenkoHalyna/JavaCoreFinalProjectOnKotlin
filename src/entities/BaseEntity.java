@@ -3,11 +3,14 @@ package entities;
 import dataAccess.identification.IdSupplier;
 import dataAccess.identification.UuIdSupplier;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
 /**
  * Created by g.zubenko on 23.01.2017.
  */
+@XmlRootElement
 public abstract class BaseEntity implements Serializable {
     static IdSupplier idProvider = UuIdSupplier.getInstance();
     private long id;
@@ -37,5 +40,10 @@ public abstract class BaseEntity implements Serializable {
 
     public long getId() {
         return id;
+    }
+
+    @XmlElement
+    private void setId(long id){
+        this.id=id;
     }
 }

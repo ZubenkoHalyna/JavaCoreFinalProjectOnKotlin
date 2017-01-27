@@ -2,46 +2,44 @@ package dataAccess.saveInFileDAO;
 
 import dataAccess.AbstractDB;
 import entities.InitialDataSupplier;
-import entities.Hotel;
-import entities.Order;
-import entities.Room;
-import entities.User;
 import exceptions.EntityNotFoundById;
 import exceptions.ReadFromDBException;
 
 /**
  * Created by g.zubenko on 26.01.2017.
  */
-public class SaveInFileDB implements AbstractDB {
+public class FileBasedDB implements AbstractDB {
     private HotelDAO hotelDAO;
     private UserDAO userDAO;
     private RoomDAO roomDAO;
     private OrderDAO orderDAO;
+    private FileAccessInterface fileAccess;
 
-    public SaveInFileDB() {
-        hotelDAO = new HotelDAO();
-        userDAO = new UserDAO();
-        roomDAO = new RoomDAO();
-        orderDAO = new OrderDAO();
+    public FileBasedDB(FileAccessInterface fileAccess) {
+        hotelDAO = new HotelDAO(this);
+        userDAO = new UserDAO(this);
+        roomDAO = new RoomDAO(this);
+        orderDAO = new OrderDAO(this);
+        this.fileAccess = fileAccess;
     }
 
     @Override
-    public DAO<User> getUserDAO() {
+    public UserDAO getUserDAO() {
         return userDAO;
     }
 
     @Override
-    public DAO<Hotel> getHotelDAO() {
+    public HotelDAO getHotelDAO() {
         return hotelDAO;
     }
 
     @Override
-    public DAO<Room> getRoomDAO() {
+    public RoomDAO getRoomDAO() {
         return roomDAO;
     }
 
     @Override
-    public DAO<Order> getOrderDAO() {
+    public OrderDAO getOrderDAO() {
         return orderDAO;
     }
 
@@ -68,5 +66,9 @@ public class SaveInFileDB implements AbstractDB {
         getRoomDAO().writeCacheToFile();
         getOrderDAO().setCache(InitialDataSupplier.getInstance().getOrders());
         getOrderDAO().writeCacheToFile();
+    }
+
+    public FileAccessInterface getFileAccessObj() {
+        return fileAccess;
     }
 }

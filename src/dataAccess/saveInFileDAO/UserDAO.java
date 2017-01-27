@@ -3,14 +3,24 @@ package dataAccess.saveInFileDAO;
 import dataAccess.FiltersUtil;
 import entities.User;
 
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.*;
 import java.util.stream.Stream;
 
 /**
  * Created by g.zubenko on 26.01.2017.
  */
+@XmlRootElement
 class UserDAO extends DAO<User>{
+    @XmlElementWrapper
     private List<User> cache = new ArrayList<>();
+
+    private UserDAO(){}
+
+    public UserDAO(FileBasedDB DB) {
+        super(DB);
+    }
 
     @Override
     protected Class getEntityClass() {
