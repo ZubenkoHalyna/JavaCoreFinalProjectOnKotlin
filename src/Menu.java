@@ -91,7 +91,7 @@ public class Menu {
         }
 
         ArrayList<Room> rooms = new ArrayList<>(controller.findRoom(params));
-        IOUtil.printCollection("rooms", false, rooms);
+        IOUtil.printCollection("Rooms", rooms, false);
         if (!rooms.isEmpty()) {
             IOUtil.askToContinue("Would you like to book some room?", this::bookRoom, rooms);
         }
@@ -126,7 +126,7 @@ public class Menu {
             user = getRegisteredUser();
             if (session.isNew()){
                 System.out.println();
-                IOUtil.printCollection("Rooms",false,rooms);
+                IOUtil.printCollection("Rooms",rooms,false);
                 session.setNew(false);
             }
         }
@@ -163,7 +163,7 @@ public class Menu {
         List<Order> orders = controller.findOrdersByUser(user);
         Collections.sort(orders);
 
-        IOUtil.printCollection("Your orders", "You haven't made any orders yet", true, orders);
+        IOUtil.printCollection("Your orders", "You haven't made any orders yet", false, orders);
         if (!orders.isEmpty()) {
             IOUtil.askToContinue("Would you like to cancel reservation?", this::cancelReservation, orders);
         }

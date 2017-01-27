@@ -24,6 +24,7 @@ public final class XMLFileAccess implements FileAccessInterface {
             Unmarshaller unmarshaller = context.createUnmarshaller();
             DAO buf = (DAO)unmarshaller.unmarshal(file);
             dao.setCache(buf.getCache());
+            dao.setTransientValuesForEntitiesInCache();
         } catch (JAXBException ex) {
             throw new ReadFromDBException(file,ex);
         }

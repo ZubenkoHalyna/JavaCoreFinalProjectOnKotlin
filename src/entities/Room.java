@@ -101,9 +101,13 @@ public class Room extends BaseEntity implements Serializable, Comparable<Room> {
         this.persons = persons;
     }
 
-    @XmlElement
     public long getHotelId() {
         return hotelId;
+    }
+
+    @XmlElement
+    private void setHotelId(long hotelId) {
+        this.hotelId = hotelId;
     }
 
     @XmlTransient

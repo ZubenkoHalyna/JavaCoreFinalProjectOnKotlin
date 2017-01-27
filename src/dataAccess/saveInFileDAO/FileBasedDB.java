@@ -16,8 +16,8 @@ public class FileBasedDB implements AbstractDB {
     private FileAccessInterface fileAccess;
 
     public FileBasedDB(FileAccessInterface fileAccess) {
-        hotelDAO = new HotelDAO(this);
         userDAO = new UserDAO(this);
+        hotelDAO = new HotelDAO(this);
         roomDAO = new RoomDAO(this);
         orderDAO = new OrderDAO(this);
         this.fileAccess = fileAccess;

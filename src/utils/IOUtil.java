@@ -22,13 +22,13 @@ public final class IOUtil {
         return readString(stringDescription, false, false);
     }
 
-    static public String readString(String stringDescription, boolean notEmpty){
-        return readString(stringDescription, notEmpty, !notEmpty);
+    static public String readString(String stringDescription, boolean mayBeEmpty){
+        return readString(stringDescription, mayBeEmpty, !mayBeEmpty);
     }
 
-    static public String readString(String stringDescription, boolean canBeEmpty, boolean informUser){
+    static public String readString(String stringDescription, boolean mayBeEmpty, boolean informUser){
         System.out.print("Input "+stringDescription+
-                ((canBeEmpty && informUser)?" or press enter to skip this filter":"")+
+                ((mayBeEmpty && informUser)?" or press enter to skip this filter":"")+
                 ": ");
         String value = "";
         try {
@@ -38,12 +38,12 @@ public final class IOUtil {
             System.out.println(IOExceptionMsg);
             System.exit(1);
         }
-        boolean shouldBeNotEmpty = !canBeEmpty;
-        if (shouldBeNotEmpty && value.isEmpty()) {
+        boolean shouldBemayBeEmpty = !mayBeEmpty;
+        if (shouldBemayBeEmpty && value.isEmpty()) {
             System.out.println(stringDescription.substring(0,1).toUpperCase()+
                     stringDescription.substring(1,stringDescription.length())+
                     " cannot be empty. Try input again.");
-            return readString(stringDescription, canBeEmpty, informUser);
+            return readString(stringDescription, mayBeEmpty, informUser);
         }
         else{
             return value;
@@ -59,8 +59,8 @@ public final class IOUtil {
         }
     }
 
-    static public long readLong(String description, boolean notEmpty, boolean informUser) {
-        String stringValue = readString(description, notEmpty, informUser);
+    static public long readLong(String description, boolean mayBeEmpty, boolean informUser) {
+        String stringValue = readString(description, mayBeEmpty, informUser);
         if (stringValue.isEmpty()) {
             throw new InputWasSkippedException(description);
         }
@@ -68,12 +68,12 @@ public final class IOUtil {
             return Long.parseLong(stringValue);
         } catch (NumberFormatException e) {
             System.out.println(description + " should be an integer value. Try input again.");
-            return readLong(description, notEmpty, informUser);
+            return readLong(description, mayBeEmpty, informUser);
         }
     }
 
-    static public int readInt(String description, boolean notEmpty, boolean informUser) {
-        String stringValue = readString(description, notEmpty, informUser);
+    static public int readInt(String description, boolean mayBeEmpty, boolean informUser) {
+        String stringValue = readString(description, mayBeEmpty, informUser);
         if (stringValue.isEmpty()) {
             throw new InputWasSkippedException(description);
         }
@@ -81,7 +81,7 @@ public final class IOUtil {
             return Integer.parseInt(stringValue);
         } catch (NumberFormatException e) {
             System.out.println(description + " should be an integer value. Try input again.");
-            return readInt(description, notEmpty, informUser);
+            return readInt(description, mayBeEmpty, informUser);
         }
     }
 
@@ -99,22 +99,22 @@ public final class IOUtil {
         return value;
     }
 
-    static public Date readDate(String description, boolean notEmpty){
+    static public Date readDate(String description, boolean mayBeEmpty){
         Date currentDate = new Date();
-        return readDate(description, currentDate, notEmpty, !notEmpty);
+        return readDate(description, currentDate, mayBeEmpty, mayBeEmpty);
     }
 
-    static public Date readDate(String description, boolean notEmpty, Date dateAfter){
-        return readDate(description, dateAfter, notEmpty, !notEmpty);
+    static public Date readDate(String description, boolean mayBeEmpty, Date dateAfter){
+        return readDate(description, dateAfter, mayBeEmpty, mayBeEmpty);
     }
 
-    static public Date readDate(String description, boolean notEmpty, boolean informUser){
+    static public Date readDate(String description, boolean mayBeEmpty, boolean informUser){
         Date currentDate = new Date();
-        return readDate(description, currentDate, notEmpty, informUser);
+        return readDate(description, currentDate, mayBeEmpty, informUser);
     }
 
-    static public Date readDate(String description, Date dateAfter, boolean notEmpty, boolean informUser) {
-        String stringValue = readString(description, notEmpty, informUser);
+    static public Date readDate(String description, Date dateAfter, boolean mayBeEmpty, boolean informUser) {
+        String stringValue = readString(description, mayBeEmpty, informUser);
         if (stringValue.isEmpty()) {
             throw new InputWasSkippedException(description);
         }
@@ -123,14 +123,14 @@ public final class IOUtil {
             value = DateUtil.stringToDate(stringValue);
         } catch (StringToDateConvertingException e) {
             System.out.println(description + " should be a date in format dd.mm.yyyy. Try input again.");
-            return readDate(description, dateAfter, notEmpty, informUser);
+            return readDate(description, dateAfter, mayBeEmpty, informUser);
         }
         if (value.after(dateAfter)) {
             return value;
         } else {
             System.out.println(description + " should be after " +
                     DateUtil.dateToStr(dateAfter) + ". Try input again.");
-            return readDate(description, dateAfter, notEmpty, informUser);
+            return readDate(description, dateAfter, mayBeEmpty, informUser);
         }
     }
 
@@ -174,45 +174,34 @@ public final class IOUtil {
         return false;
     }
 
-    static public void askToContinue(String question, Operator operator){
-        System.out.print(question+" (Y - yes/N - no) ");
-        try {
-            String s = IOUtil.consoleReader.readLine();
-            if (!s.isEmpty() && (s.charAt(0)=='y' || s.charAt(0)=='Y')){
-                operator.execute();
-            }
-        } catch (IOException e){
-            System.out.println(IOExceptionMsg);
+    static public void askToContinue(String question, Operator operator) {
+        if (askToContinue(question)) {
+            operator.execute();
         }
     }
 
     static public <T> void askToContinue(String question, Consumer<List<T>> consumer, List<T> param) {
-        System.out.print(question+" (Y - yes/N - no) ");
-        try {
-            String s = consoleReader.readLine();
-            if (!s.isEmpty() && (s.charAt(0)=='y' || s.charAt(0)=='Y')){
-                consumer.accept(param);
-            }
-        } catch (IOException e){
-            System.out.println(IOExceptionMsg);
+        if (askToContinue(question)) {
+            consumer.accept(param);
         }
     }
 
-    static public <T> void printCollection(String itemDescription, boolean waitForUser, Collection<T> c){
+    static public <T> void printCollection(String itemDescription, Collection<T> c) {
+        printCollection(itemDescription, c, true);
+    }
+
+    static public <T> void printCollection(String itemDescription, Collection<T> c, boolean waitForUser){
         printCollection(itemDescription + " on your request",
                 "There no "+itemDescription + " on your request.",
                 waitForUser,
                 c);
     }
 
-    static public <T> void printCollection(String itemDescription, Collection<T> c){
-        printCollection(itemDescription, true, c);
-    }
-
     static public <T> void printCollection(String description, String msgIfEmpty,
                                                               boolean waitForUser, Collection<T> c) {
         if (c.isEmpty()) {
             System.out.println(msgIfEmpty);
+            pressEnterToContinue();
         } else {
             System.out.println(description + ":");
             int elementNumber = 0;
@@ -220,8 +209,8 @@ public final class IOUtil {
             while (iterator.hasNext()) {
                 System.out.format("%2d %s \n", ++elementNumber, iterator.next());
             }
+            if (waitForUser) pressEnterToContinue();
         }
-        if (waitForUser) pressEnterToContinue();
     }
 
     static public void informUser(String information) {

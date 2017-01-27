@@ -50,9 +50,13 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
                 DateUtil.dateToStr(endReservationDate);
     }
 
-    @XmlElement
     public long getUserId() {
         return userId;
+    }
+
+    @XmlElement
+    private void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public User getUser(User user) {
@@ -64,9 +68,13 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
         cacheUser = user;
     }
 
-    @XmlElement
     public long getRoomId() {
         return roomId;
+    }
+
+    @XmlElement
+    private void setRoomId(long roomId) {
+        this.roomId = roomId;
     }
 
     public Room getRoom() {
