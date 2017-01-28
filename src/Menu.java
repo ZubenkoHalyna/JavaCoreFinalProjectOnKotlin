@@ -127,7 +127,6 @@ public class Menu {
             if (session.isNew()){
                 System.out.println();
                 IOUtil.printCollection("Rooms",rooms,false);
-                session.setNew(false);
             }
         }
         catch (UnAuthorizedSessionException e){
@@ -142,7 +141,7 @@ public class Menu {
         Date endDate = IOUtil.readDate("end reservation date",false,startDate);
         if (controller.isRoomFree(room,startDate,endDate)){
             Order order = controller.registerOrder(user, room, startDate, endDate);
-            IOUtil.informUser("Registered order: "+order.toString());
+            IOUtil.informUser("Registered order: "+order.getView());
         }
         else{
             IOUtil.informUser("Room has already reserved");
@@ -155,13 +154,11 @@ public class Menu {
             user = getRegisteredUser();
             if (session.isNew()){
                 System.out.println();
-                session.setNew(false);
             }
         } catch (UnAuthorizedSessionException e) {
             return;
         }
         List<Order> orders = controller.findOrdersByUser(user);
-        Collections.sort(orders);
 
         IOUtil.printCollection("Your orders", "You haven't made any orders yet", false, orders);
         if (!orders.isEmpty()) {

@@ -8,7 +8,6 @@ import entities.User;
 /**
  * Created by g.zubenko on 17.01.2017.
  */
-
 public interface AbstractDB {
     DAOInterface<User> getUserDAO();
     DAOInterface<Hotel> getHotelDAO();

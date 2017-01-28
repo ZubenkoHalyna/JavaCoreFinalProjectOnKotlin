@@ -1,4 +1,4 @@
-package dataAccess.mockDAO;
+package dataAccess.cacheBased;
 
 import dataAccess.DAOInterface;
 import entities.BaseEntity;
@@ -15,11 +15,11 @@ import java.util.stream.Stream;
  * Created by g.zubenko on 16.01.2017.
  */
 abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
-    private MockDB DB;
+    private CacheDB DB;
     abstract public Stream<T> filter(Map<String,String> params);
     abstract protected Class getEntityClass();
 
-    public DAO(MockDB DB) {
+    public DAO(CacheDB DB) {
         this.DB = DB;
     }
 
@@ -65,7 +65,7 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
         }
     }
 
-    public MockDB getDB() {
+    public CacheDB getDB() {
         return DB;
     }
 }

@@ -1,8 +1,8 @@
 import dataAccess.AbstractDB;
-import dataAccess.mockDAO.MockDB;
-import dataAccess.saveInFileDAO.BinariFileAccess;
-import dataAccess.saveInFileDAO.FileBasedDB;
-import dataAccess.saveInFileDAO.XMLFileAccess;
+import dataAccess.cacheBased.CacheDB;
+import dataAccess.fileBased.BinariFileAccess;
+import dataAccess.fileBased.FileBasedDB;
+import dataAccess.fileBased.XMLFileAccess;
 import utils.IOUtil;
 
 import java.io.*;
@@ -51,7 +51,7 @@ public class Main {
                 DB = new FileBasedDB(new BinariFileAccess());
                 break;
             case 3:
-                DB = new MockDB();
+                DB = new CacheDB();
                 break;
         }
 
@@ -60,7 +60,7 @@ public class Main {
                 DB.Initialize();
                 IOUtil.informUser("DB was filled with initial data");
             } catch (Exception e) {
-                DB = new MockDB();
+                DB = new CacheDB();
                 IOUtil.informUser("DB files are unavailable. Programme will run in test mode.");
             }
         }

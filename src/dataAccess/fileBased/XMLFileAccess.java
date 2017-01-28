@@ -1,4 +1,4 @@
-package dataAccess.saveInFileDAO;
+package dataAccess.fileBased;
 
 import exceptions.ReadFromDBException;
 import exceptions.WriteToDBException;

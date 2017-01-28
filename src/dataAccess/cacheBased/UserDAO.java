@@ -1,4 +1,4 @@
-package dataAccess.mockDAO;
+package dataAccess.cacheBased;
 
 import dataAccess.FiltersUtil;
 import entities.User;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 class UserDAO extends DAO<User> {
     private static List<User> users = new ArrayList<>();
 
-    public UserDAO(MockDB DB) {
+    public UserDAO(CacheDB DB) {
         super(DB);
     }
 

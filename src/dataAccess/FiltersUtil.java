@@ -35,7 +35,7 @@ public final class FiltersUtil {
             hotelStream = hotelStream.filter(h -> h.getCity().equalsIgnoreCase(city));
         }
 
-        return hotelStream;
+        return hotelStream.sorted();
     }
 
     public static Stream<Order> filterOrders(Map<String, String> params, DAOInterface<Order> orderDAO) {
@@ -80,7 +80,7 @@ public final class FiltersUtil {
             }
         }
 
-        return orderStream;
+        return orderStream.sorted();
     }
 
     public static Stream<Room> filterRooms(Map<String, String> params, DAOInterface<Room> roomDAO, DAOInterface<Order> orderDAO) {
@@ -89,6 +89,7 @@ public final class FiltersUtil {
         String priceVariation = params.get(Room.FieldsForSearch.PRICE_VARIATION.toString());
         String persons = params.get(Room.FieldsForSearch.NUMBER_OF_PERSONS.toString());
         String hotelId = params.get(Room.FieldsForSearch.HOTEL_ID.toString());
+        String hotelName = params.get(Room.FieldsForSearch.HOTEL_NAME.toString());
         String city = params.get(Room.FieldsForSearch.CITY.toString());
         String startDate = params.get(Room.FieldsForSearch.START_DATE.toString());
         String endDate = params.get(Room.FieldsForSearch.END_DATE.toString());
@@ -122,6 +123,10 @@ public final class FiltersUtil {
             roomStream = roomStream.filter(r -> r.getHotelId() == castedHotelId);
         }
 
+        if (!(hotelName == null || hotelName.isEmpty())) {
+            roomStream = roomStream.filter(r -> r.getHotel().getName().equalsIgnoreCase(hotelName));
+        }
+
         if (!(city == null || city.isEmpty())) {
             roomStream = roomStream.filter(r -> r.getHotel().getCity().equalsIgnoreCase(city));
         }
@@ -136,8 +141,6 @@ public final class FiltersUtil {
                 } else {
                     castedEndDate = new Date(castedStartDate.getTime());
                 }
-                Map<String,String> emptyParams = new HashMap<>();
-                List<Order> allOrders = orderDAO.select(emptyParams);
                 roomStream = roomStream.filter(room -> !(orderExists(room, castedStartDate, castedEndDate, orderDAO)));
             } catch (StringToDateConvertingException e) {
                 System.err.print(e.getMessage());

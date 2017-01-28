@@ -11,7 +11,7 @@ import java.util.Date;
  * Created by g.zubenko on 23.01.2017.
  */
 public class Order extends BaseEntity implements Comparable<Order>, Serializable {
-    public enum FieldsForSearch {ID, USER_ID, ROOM_ID, START_DATE, END_DATE, }
+    public enum FieldsForSearch {ID, USER_ID, ROOM_ID, START_DATE, END_DATE}
 
     private long userId;
     private transient User cacheUser;
@@ -34,20 +34,28 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
     @Override
     public int compareTo(Order o) {
         if (equals(o)) return 0;
-        if (startReservationDate.after(o.getStartReservationDate())) {
-            return -1;
-        }
-        if (startReservationDate.equals(endReservationDate)){
-            return getId()>o.getId()? -1:1;
-        }
-        return 1;
+        if (startReservationDate.after(o.getStartReservationDate())) return -1;
+        if (startReservationDate.before(o.getStartReservationDate())) return 1;
+        return getRoom().compareTo(o.getRoom());
+    }
+
+    @Override
+    public String getView() {
+        return cacheRoom.getView()+", from "+
+                DateUtil.dateToStr(startReservationDate)+ " to "+
+                DateUtil.dateToStr(endReservationDate);
     }
 
     @Override
     public String toString() {
-        return cacheRoom+", from "+
-                DateUtil.dateToStr(startReservationDate)+ " to "+
-                DateUtil.dateToStr(endReservationDate);
+        return "Order{" +
+                "city=" + getRoom().getHotel().getCity() +
+                ", hotel name=" + getRoom().getHotel().getName() +
+                ", price per day=" + getRoom().getPrice() +
+                ", persons=" + getRoom().getPersons() +
+                ", start date=" + DateUtil.dateToStr(startReservationDate) +
+                ", end date=" + DateUtil.dateToStr(endReservationDate) +
+                '}';
     }
 
     public long getUserId() {

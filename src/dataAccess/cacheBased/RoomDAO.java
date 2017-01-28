@@ -1,4 +1,4 @@
-package dataAccess.mockDAO;
+package dataAccess.cacheBased;
 
 import dataAccess.FiltersUtil;
 import entities.Room;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 class RoomDAO extends DAO<Room>{
     private static List<Room> rooms = new ArrayList<>();
 
-    public RoomDAO(MockDB DB) {
+    public RoomDAO(CacheDB DB) {
         super(DB);
     }
 

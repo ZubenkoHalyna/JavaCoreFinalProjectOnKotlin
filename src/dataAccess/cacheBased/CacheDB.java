@@ -1,4 +1,4 @@
-package dataAccess.mockDAO;
+package dataAccess.cacheBased;
 
 import dataAccess.AbstractDB;
 import entities.InitialDataSupplier;
@@ -6,13 +6,13 @@ import entities.InitialDataSupplier;
 /**
  * Created by g.zubenko on 17.01.2017.
  */
-public class MockDB implements AbstractDB {
+public class CacheDB implements AbstractDB {
     private HotelDAO hotelDAO;
     private UserDAO userDAO;
     private RoomDAO roomDAO;
     private OrderDAO orderDAO;
 
-    public MockDB() {
+    public CacheDB() {
         hotelDAO = new HotelDAO(this);
         userDAO = new UserDAO(this);
         roomDAO = new RoomDAO(this);

@@ -13,7 +13,7 @@ public class Session {
         return this;
     }
 
-    public Session(){}
+    public Session(){isNew = true;}
 
     public Session(User u){
         user = u;
@@ -26,6 +26,7 @@ public class Session {
     @Override
     public String toString() {
         if (user!=null){
+            if (isNew) isNew = false;
             return user.getLogin();
         }
         else

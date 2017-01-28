@@ -10,6 +10,7 @@ import java.util.UUID;
 @XmlRootElement
 public abstract class BaseEntity {
     private long id;
+    abstract String getView();
 
     public BaseEntity() {
         this.id = getNewId();

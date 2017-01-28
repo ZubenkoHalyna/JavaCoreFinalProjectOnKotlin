@@ -16,8 +16,15 @@ public class User extends BaseEntity  implements Serializable {
     }
 
     @Override
-    public String toString() {
+    public String getView() {
         return login;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                '}';
     }
 
     public String getLogin() {

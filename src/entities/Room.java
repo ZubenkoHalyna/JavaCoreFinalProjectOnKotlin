@@ -8,14 +8,15 @@ import static entities.FieldType.*;
 
 public class Room extends BaseEntity implements Serializable, Comparable<Room> {
     public enum FieldsForSearch {
-        ID(                 false, LONG,  "id"),
-        PRICE(              true,  INT,   "price per day"),
-        PRICE_VARIATION(    false, INT,   "acceptable price variation in percents"),
-        NUMBER_OF_PERSONS(  true,  INT,   "number of persons"),
-        HOTEL_ID(           false, LONG,  "hotel id"),
-        CITY(               true,  STRING,"city"),
-        START_DATE(         true,  DATE,  "start date of reservation"),
-        END_DATE(           false, DATE,  "end date of reservation");
+        ID(                 false,  LONG,   "id"),
+        PRICE(              true,   INT,    "price per day"),
+        PRICE_VARIATION(    false,  INT,    "acceptable price variation in percents"),
+        NUMBER_OF_PERSONS(  true,   INT,    "number of persons"),
+        HOTEL_ID(           false,  LONG,   "hotel id"),
+        HOTEL_NAME(         true,   STRING, "hotel name"),
+        CITY(               true,   STRING, "city"),
+        START_DATE(         true,   DATE,   "start date of reservation"),
+        END_DATE(           false,  DATE,   "end date of reservation");
 
         public final String description;
         public final boolean directForUser;
@@ -33,7 +34,8 @@ public class Room extends BaseEntity implements Serializable, Comparable<Room> {
     private long hotelId;
     private transient Hotel cacheHotel;
 
-    private Room(){}
+    private Room() {
+    }
 
     public Room(int price, int persons, Hotel hotel) {
         this.price = price;
@@ -45,13 +47,11 @@ public class Room extends BaseEntity implements Serializable, Comparable<Room> {
     @Override
     public int compareTo(Room r) {
         if (equals(r)) return 0;
-        if (price>(r.getPrice())) {
-            return -1;
-        }
-        if (price==r.getPrice()){
-            return getId()>r.getId()? -1:1;
-        }
-        return 1;
+        if (persons > r.persons) return -1;
+        if (persons < r.persons) return 1;
+        if (price > (r.getPrice())) return -1;
+        if (price < (r.getPrice())) return 1;
+        return getHotel().compareTo(r.getHotel());
     }
 
     @Override
@@ -69,18 +69,27 @@ public class Room extends BaseEntity implements Serializable, Comparable<Room> {
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + price;
+        int result = price;
         result = 31 * result + persons;
         result = 31 * result + (int) (hotelId ^ (hotelId >>> 32));
         return result;
     }
 
     @Override
+    public String getView() {
+        return cacheHotel.getView() + ", " +
+                price + " USD per day, " +
+                persons + " person" + ((persons == 1) ? "" : "s");
+    }
+
+    @Override
     public String toString() {
-        return cacheHotel+", "+
-                price+" USD per day, "+
-                persons+" person"+((persons==1)?"":"s");
+        return "Room{" +
+                "price=" + price +
+                ", persons=" + persons +
+                ", hotel name=" + getHotel().getName() +
+                ", city=" + getHotel().getCity() +
+                '}';
     }
 
     public int getPrice() {

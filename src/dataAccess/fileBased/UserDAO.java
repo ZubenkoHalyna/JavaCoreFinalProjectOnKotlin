@@ -1,4 +1,4 @@
-package dataAccess.saveInFileDAO;
+package dataAccess.fileBased;
 
 import dataAccess.FiltersUtil;
 import entities.User;

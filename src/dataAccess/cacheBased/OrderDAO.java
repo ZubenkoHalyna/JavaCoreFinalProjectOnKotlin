@@ -1,4 +1,4 @@
-package dataAccess.mockDAO;
+package dataAccess.cacheBased;
 
 import dataAccess.FiltersUtil;
 import entities.Order;
@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 class OrderDAO extends DAO<Order>{
     private static List<Order> orders = new ArrayList<>();
 
-    public OrderDAO(MockDB DB) {
+    public OrderDAO(CacheDB DB) {
         super(DB);
     }
 

@@ -1,4 +1,4 @@
-package dataAccess.saveInFileDAO;
+package dataAccess.fileBased;
 
 import dataAccess.AbstractDB;
 import entities.InitialDataSupplier;

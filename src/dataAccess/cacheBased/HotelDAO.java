@@ -1,4 +1,4 @@
-package dataAccess.mockDAO;
+package dataAccess.cacheBased;
 
 import dataAccess.FiltersUtil;
 import entities.Hotel;
@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 class HotelDAO extends DAO<Hotel> {
     private static List<Hotel> hotels = new ArrayList<>();
 
-    public HotelDAO(MockDB DB) {
+    public HotelDAO(CacheDB DB) {
         super(DB);
     }
 

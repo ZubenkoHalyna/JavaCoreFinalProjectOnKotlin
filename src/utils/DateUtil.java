@@ -11,8 +11,9 @@ import java.util.Date;
 public final class DateUtil {
     public static Date stringToDate(String str){
         try{
-            SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-            return format.parse(str);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            dateFormat.setLenient(false);
+            return dateFormat.parse(str);
         }
         catch (Exception e){
             throw new StringToDateConvertingException(str,e);
