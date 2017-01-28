@@ -25,7 +25,7 @@ class OrderDAO extends DAO<Order>{
 
     @Override
     public Stream<Order> filter(Map<String, String> params) {
-        return FiltersUtil.filterOrders(params, getOrderDAO());
+        return FiltersUtil.filterOrders(params, getDB().getOrderDAO());
     }
 
     @Override

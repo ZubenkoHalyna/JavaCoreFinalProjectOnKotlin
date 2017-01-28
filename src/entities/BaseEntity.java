@@ -1,26 +1,23 @@
 package entities;
 
-import dataAccess.identification.IdSupplier;
-import dataAccess.identification.UuIdSupplier;
-
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by g.zubenko on 23.01.2017.
  */
 @XmlRootElement
-public abstract class BaseEntity implements Serializable {
-    static IdSupplier idProvider = UuIdSupplier.getInstance();
+public abstract class BaseEntity {
     private long id;
 
     public BaseEntity() {
-        this.id = idProvider.getNewId();
+        this.id = getNewId();
     }
 
-    public BaseEntity(long id) {
-        this.id = id;
+    private long getNewId()
+    {
+        return -(UUID.randomUUID().getLeastSignificantBits());
     }
 
     @Override

@@ -23,7 +23,7 @@ class RoomDAO extends DAO<Room>{
 
     @Override
     public Stream<Room> filter(Map<String, String> params) {
-        return FiltersUtil.filterRooms(params,getRoomDAO(),getOrderDAO());
+        return FiltersUtil.filterRooms(params,getDB().getRoomDAO(),getDB().getOrderDAO());
     }
 
     @Override

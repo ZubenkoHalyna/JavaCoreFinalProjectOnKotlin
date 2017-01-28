@@ -18,7 +18,7 @@ class UserDAO extends DAO<User> {
 
     @Override
     public Stream<User> filter(Map<String, String> params) {
-        return FiltersUtil.filterUsers(params,getUserDAO());
+        return FiltersUtil.filterUsers(params,getDB().getUserDAO());
     }
 
     @Override

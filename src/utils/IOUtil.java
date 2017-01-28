@@ -18,8 +18,13 @@ public final class IOUtil {
     static final private String IOExceptionMsg = "Input failed.";
     static final private BufferedReader consoleReader = new BufferedReader(new InputStreamReader(System.in));
 
-    static public String readString(String stringDescription){
-        return readString(stringDescription, false, false);
+    static public void pressEnterToContinue() {
+        System.out.print("Press enter to continue...");
+        try {
+            consoleReader.readLine();
+        } catch (IOException e) {
+            System.out.println(IOExceptionMsg);
+        }
     }
 
     static public String readString(String stringDescription, boolean mayBeEmpty){
@@ -47,15 +52,6 @@ public final class IOUtil {
         }
         else{
             return value;
-        }
-    }
-
-    static public void pressEnterToContinue() {
-        System.out.print("Press enter to continue...");
-        try {
-            consoleReader.readLine();
-        } catch (IOException e) {
-            System.out.println(IOExceptionMsg);
         }
     }
 
@@ -229,11 +225,5 @@ public final class IOUtil {
     static public void informUserAndAskToContinue(String information, String question, Operator operator) {
         System.out.print(information+" ");
         askToContinue(question, operator);
-    }
-
-    static public <T> void informUserAndAskToContinue(String information, String question,
-                                                      Consumer<List<T>> consumer, List<T> param) {
-        System.out.print(information+" ");
-        askToContinue(question, consumer, param);
     }
 }

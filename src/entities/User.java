@@ -4,7 +4,6 @@ import javax.xml.bind.annotation.XmlElement;
 import java.io.Serializable;
 
 public class User extends BaseEntity  implements Serializable {
-
     public enum FieldsForSearch {ID, LOGIN, PASSWORD}
     private String login;
     private String password;

@@ -17,4 +17,3 @@ public interface AbstractDB {
     boolean dataIsCorrect();
     void Initialize();
 }
-

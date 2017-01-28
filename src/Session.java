@@ -1,26 +1,22 @@
 import entities.User;
 import exceptions.UnAuthorizedSessionException;
 
-import java.util.Optional;
-
 /**
  * Created by g.zubenko on 24.01.2017.
  */
 public class Session {
     private final String GUEST_LOGIN="guest";
-    private Optional<User> user;
+    private User user;
     private boolean isNew = true;
 
     public Session start(){
         return this;
     }
 
-    public Session(){
-        user = Optional.empty();
-    }
+    public Session(){}
 
     public Session(User u){
-        user = Optional.of(u);
+        user = u;
     }
 
     public boolean close(){
@@ -29,8 +25,8 @@ public class Session {
 
     @Override
     public String toString() {
-        if (user.isPresent()){
-            return user.get().getLogin();
+        if (user!=null){
+            return user.getLogin();
         }
         else
         {
@@ -39,8 +35,8 @@ public class Session {
     }
 
     public User getUser() throws UnAuthorizedSessionException {
-        if (user.isPresent()) {
-            return user.get();
+        if (user!=null) {
+            return user;
         } else {
             throw new UnAuthorizedSessionException();
         }

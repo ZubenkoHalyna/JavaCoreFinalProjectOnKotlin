@@ -92,16 +92,7 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
         return true;
     }
 
-    protected HotelDAO getHotelDAO(){
-        return DB.getHotelDAO();
-    }
-    protected RoomDAO getRoomDAO(){
-        return DB.getRoomDAO();
-    }
-    protected UserDAO getUserDAO(){
-        return DB.getUserDAO();
-    }
-    protected OrderDAO getOrderDAO(){
-        return DB.getOrderDAO();
+    public FileBasedDB getDB() {
+        return DB;
     }
 }

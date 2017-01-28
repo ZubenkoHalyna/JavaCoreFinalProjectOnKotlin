@@ -18,7 +18,7 @@ class UserDAO extends DAO<User>{
 
     private UserDAO(){}
 
-    public UserDAO(FileBasedDB DB) {
+    UserDAO(FileBasedDB DB) {
         super(DB);
     }
 
@@ -44,6 +44,6 @@ class UserDAO extends DAO<User>{
 
     @Override
     public Stream<User> filter(Map<String, String> params) {
-        return FiltersUtil.filterUsers(params, getUserDAO());
+        return FiltersUtil.filterUsers(params, getDB().getUserDAO());
     }
 }

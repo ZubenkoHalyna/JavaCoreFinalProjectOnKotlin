@@ -18,7 +18,7 @@ class RoomDAO extends DAO<Room> {
 
     private RoomDAO(){}
 
-    public RoomDAO(FileBasedDB DB) {
+    RoomDAO(FileBasedDB DB) {
         super(DB);
     }
 
@@ -29,13 +29,13 @@ class RoomDAO extends DAO<Room> {
 
     @Override
     public Stream<Room> filter(Map<String, String> params) {
-        return FiltersUtil.filterRooms(params, getRoomDAO(), getOrderDAO());
+        return FiltersUtil.filterRooms(params, getDB().getRoomDAO(), getDB().getOrderDAO());
     }
 
     @Override
     void setTransientValuesForEntitiesInCache(){
         for (Room room : cache) {
-            room.setHotel(getHotelDAO().getById(room.getHotelId()));
+            room.setHotel(getDB().getHotelDAO().getById(room.getHotelId()));
         }
     }
 

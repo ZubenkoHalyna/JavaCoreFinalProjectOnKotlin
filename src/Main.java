@@ -25,6 +25,7 @@ public class Main {
                 mainMenu.nextStep();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
+                //TODO logger
             }
         }
     }

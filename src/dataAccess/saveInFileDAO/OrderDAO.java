@@ -18,7 +18,7 @@ class OrderDAO extends DAO<Order> {
 
     private OrderDAO(){}
 
-    public OrderDAO(FileBasedDB DB) {
+    OrderDAO(FileBasedDB DB) {
         super(DB);
     }
 
@@ -29,14 +29,14 @@ class OrderDAO extends DAO<Order> {
 
     @Override
     public Stream<Order> filter(Map<String, String> params) {
-        return FiltersUtil.filterOrders(params,getOrderDAO());
+        return FiltersUtil.filterOrders(params,getDB().getOrderDAO());
     }
 
     @Override
     void setTransientValuesForEntitiesInCache(){
         for (Order order : cache) {
-            order.setRoom(getRoomDAO().getById(order.getRoomId()));
-            order.setUser(getUserDAO().getById(order.getUserId()));
+            order.setRoom(getDB().getRoomDAO().getById(order.getRoomId()));
+            order.setUser(getDB().getUserDAO().getById(order.getUserId()));
         }
     }
 

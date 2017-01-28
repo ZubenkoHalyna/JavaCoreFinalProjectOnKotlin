@@ -23,7 +23,7 @@ class HotelDAO extends DAO<Hotel> {
 
     @Override
     public Stream<Hotel> filter(Map<String,String> params) {
-        return FiltersUtil.filterHotels(params,getHotelDAO());
+        return FiltersUtil.filterHotels(params,getDB().getHotelDAO());
     }
 
     @Override

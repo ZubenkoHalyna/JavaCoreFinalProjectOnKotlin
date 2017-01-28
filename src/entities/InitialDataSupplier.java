@@ -26,9 +26,9 @@ public class InitialDataSupplier {
         users.add(new User("admin",""));
 
         hotels = new ArrayList<>();
-        hotels.add(new Hotel("Hilton","Kiev"));
-        hotels.add(new Hotel("Hilton","Odessa"));
+        hotels.add(new Hotel("Hilton",  "Kiev"));
         hotels.add(new Hotel("Radisson","Kiev"));
+        hotels.add(new Hotel("Hilton",  "Odessa"));
         hotels.add(new Hotel("Metropol","Odessa"));
 
         rooms = new ArrayList<>();
@@ -57,19 +57,6 @@ public class InitialDataSupplier {
         rooms.add(new Room(700,1,hotels.get(3)));
         rooms.add(new Room(950,2,hotels.get(3)));
         rooms.add(new Room(1450,3,hotels.get(3)));
-
-      /*  rooms.add(new Room(800,1,hotels.get(0)));
-        rooms.add(new Room(1100,2,hotels.get(0)));
-        rooms.add(new Room(1600,3,hotels.get(0)));
-        rooms.add(new Room(700,1,hotels.get(1)));
-        rooms.add(new Room(1000,2,hotels.get(1)));
-        rooms.add(new Room(1500,3,hotels.get(1)));
-        rooms.add(new Room(650,1,hotels.get(2)));
-        rooms.add(new Room(900,2,hotels.get(2)));
-        rooms.add(new Room(1400,3,hotels.get(2)));
-        rooms.add(new Room(750,1,hotels.get(3)));
-        rooms.add(new Room(1000,2,hotels.get(3)));
-        rooms.add(new Room(1550,3,hotels.get(3)));*/
 
         orders = new ArrayList<>();
         orders.add(new Order(users.get(0), rooms.get(1), DateUtil.stringToDate("10.02.2017"),
