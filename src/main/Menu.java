@@ -54,7 +54,6 @@ public class Menu {
             case 6: viewOrders(); break;
             case 7: close(); break;
         }
-        //TODO press enter to continue only there
     }
 
     private void register() {

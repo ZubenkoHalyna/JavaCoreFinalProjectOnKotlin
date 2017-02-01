@@ -24,7 +24,7 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(value = Parameterized.class)
 public class BinaryFileAccessTest<T extends BaseEntity> {
-    static AbstractDB BinaryDB;
+    static private AbstractDB BinaryDB;
     private DAOInterface<T> DAO;
     private T entity;
     private List<T> entityList;

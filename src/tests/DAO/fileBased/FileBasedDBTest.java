@@ -11,8 +11,8 @@ import static org.junit.Assert.assertTrue;
  * Created by g.zubenko on 01.02.2017.
  */
 public class FileBasedDBTest extends CacheBasedDBTest {
-    MockFileAccess fileAccess = new MockFileAccess();
-    FileBasedDB localDB = new FileBasedDB(fileAccess);
+    private MockFileAccess fileAccess = new MockFileAccess();
+    private FileBasedDB localDB = new FileBasedDB(fileAccess);
 
     public FileBasedDBTest(){
         DB = localDB;

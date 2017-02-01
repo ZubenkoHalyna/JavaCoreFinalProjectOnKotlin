@@ -21,24 +21,24 @@ class MockFileAccess implements FileAccessInterface {
         numberOfWrites++;
     }
 
-    public void newStep(){
+    void newStep(){
         numberOfReads = 0;
         numberOfWrites = 0;
     }
 
-    public int getNumberOfReads() {
+    int getNumberOfReads() {
         return numberOfReads;
     }
 
-    public void setNumberOfReads(int numberOfReads) {
+    void setNumberOfReads(int numberOfReads) {
         this.numberOfReads = numberOfReads;
     }
 
-    public int getNumberOfWrites() {
+    int getNumberOfWrites() {
         return numberOfWrites;
     }
 
-    public void setNumberOfWrites(int numberOfWrites) {
+    void setNumberOfWrites(int numberOfWrites) {
         this.numberOfWrites = numberOfWrites;
     }
 }
