@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="468.9351851851851" y="183.0">entities.Order</node>
+    <node x="240.98148148148147" y="-8.0">entities.BaseEntity</node>
+    <node x="-116.51851851851853" y="163.0">entities.Room</node>
+    <node x="543.9814814814815" y="-6.0">entities.User</node>
+    <node x="-58.0" y="-16.0">entities.Hotel</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="entities.Hotel" target="entities.BaseEntity">
+      <point x="0.0" y="-64.0" />
+      <point x="128.0" y="45.0" />
+      <point x="286.73148148148147" y="46.0" />
+      <point x="-71.25" y="54.0" />
+    </edge>
+    <edge source="entities.Room" target="entities.BaseEntity">
+      <point x="79.0" y="-104.0" />
+      <point x="136.48148148148147" y="209.0" />
+      <point x="172.49999999999997" y="203.0" />
+      <point x="268.5" y="203.0" />
+      <point x="269.23148148148147" y="59.0" />
+      <point x="-23.75" y="54.0" />
+    </edge>
+    <edge source="entities.Room" target="entities.Hotel">
+      <point x="-79.0" y="-104.0" />
+      <point x="86.48148148148147" y="311.0" />
+      <point x="87.0" y="61.0" />
+      <point x="0.0" y="64.0" />
+    </edge>
+    <edge source="entities.User" target="entities.BaseEntity">
+      <point x="0.0" y="-54.0" />
+      <point x="579.9814814814815" y="21.0" />
+      <point x="382.73148148148147" y="22.0" />
+      <point x="23.75" y="54.0" />
+    </edge>
+    <edge source="entities.Order" target="entities.User">
+      <point x="2.8421709430404007E-14" y="-104.0" />
+      <point x="628.4351851851852" y="273.0" />
+      <point x="637.9814814814815" y="258.0" />
+      <point x="0.0" y="54.0" />
+    </edge>
+    <edge source="entities.Order" target="entities.Room">
+      <point x="-105.66666666666666" y="-104.0" />
+      <point x="511.7685185185185" y="268.0" />
+      <point x="120.48148148148147" y="268.0" />
+      <point x="0.0" y="104.0" />
+    </edge>
+    <edge source="entities.Order" target="entities.BaseEntity">
+      <point x="105.66666666666671" y="-104.0" />
+      <point x="556.1018518518518" y="305.0" />
+      <point x="500.48148148148147" y="250.0" />
+      <point x="499.48148148148147" y="89.0" />
+      <point x="425.23148148148147" y="89.0" />
+      <point x="71.25" y="54.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="323.5" y="209.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Properties</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>protected</VISIBILITY>
+</Diagram>
+

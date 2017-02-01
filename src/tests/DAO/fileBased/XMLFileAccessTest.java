@@ -77,6 +77,8 @@ public class XMLFileAccessTest<T extends BaseEntity>{
     public void insert() throws Exception {
         DAO.insert(entity);
         assertEquals("Method insert in class "+DAO.getClass().getName()+" doesn't work correct",1,DAO.selectAll().size());
+        // Next line create new instance of the class FileBasedDB. This instance should get data from DB file.
+        // So next assert statement check if data in DB file was written correctly.
         FileBasedDB newDB = new FileBasedDB(new XMLFileAccess());
         assertEquals("Method insert in class "+DAO.getClass().getName()+" doesn't work correct: it doesn't write correct data in XML file",
                 1,getNewDAO(newDB,DAO).selectAll().size());
@@ -113,8 +115,7 @@ public class XMLFileAccessTest<T extends BaseEntity>{
     public DAOInterface getNewDAO(FileBasedDB newDB, DAOInterface DAO){
         if (DAO.getClass().getSimpleName().equals("HotelDAO")){return newDB.getHotelDAO();}
         if (DAO.getClass().getSimpleName().equals("UserDAO")){return newDB.getUserDAO();}
-        if (DAO.getClass().getSimpleName().equals("RoomDAO")){
-            return newDB.getRoomDAO();}
+        if (DAO.getClass().getSimpleName().equals("RoomDAO")){return newDB.getRoomDAO();}
         return newDB.getOrderDAO();
     }
 

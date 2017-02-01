@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="0.0" y="0.0">main.Controller</node>
+    <node x="316.0" y="327.0">main.Main</node>
+    <node x="528.0" y="69.0">main.Menu</node>
+    <node x="-32.0" y="276.0">dataAccess.AbstractDB</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="main.Menu" target="main.Controller">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="main.Main" target="main.Controller">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="main.Controller" target="dataAccess.AbstractDB">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="main.Main" target="dataAccess.AbstractDB">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="main.Main" target="main.Menu">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="278.5" y="210.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Properties</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>protected</VISIBILITY>
+</Diagram>
+

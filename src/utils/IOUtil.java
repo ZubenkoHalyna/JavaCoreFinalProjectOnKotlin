@@ -170,7 +170,7 @@ public final class IOUtil {
         } catch (IOException e){
             System.out.println(IOExceptionMsg);
         }
-        System.out.print("You should input either \"y\" or \"n\". ");
+        System.out.print("You should input either \"y\" or \"n\". Try input again.\n");
         return askToContinue(question);
     }
 

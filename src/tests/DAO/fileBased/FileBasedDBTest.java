@@ -25,7 +25,7 @@ public class FileBasedDBTest extends CacheBasedDBTest {
         assertEquals("Method dataIsCorrect in class FileBasedDB doesn't work correct: it should call readCacheFromFile for each DAO ",
                 4,fileAccess.getNumberOfReads());
         localDB.Initialize();
-        assertTrue("Method dataIsCorrect in class FileBasedDB doesn't work correct: after initialization data is correct",
+        assertTrue("Method dataIsCorrect in class FileBasedDB doesn't work correct: after initialization data should be correct",
                 localDB.dataIsCorrect());
         assertEquals("Method Initialize in class FileBasedDB doesn't work correct: it should call writeCacheToFile for each DAO ",
                 4,fileAccess.getNumberOfWrites());

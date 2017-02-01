@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="-125.5" y="312.0">dataAccess.DAOInterface</node>
+    <node x="255.0" y="-50.0">dataAccess.fileBased.XMLFileAccess</node>
+    <node x="-326.5" y="-52.0">dataAccess.cacheBased.CacheBasedDB</node>
+    <node x="165.0" y="100.0">dataAccess.fileBased.RoomDAO</node>
+    <node x="271.0" y="101.0">dataAccess.fileBased.OrderDAO</node>
+    <node x="94.0" y="-41.0">dataAccess.fileBased.FileBasedDB</node>
+    <node x="-269.5" y="104.0">dataAccess.cacheBased.RoomDAO</node>
+    <node x="370.0" y="-52.0">dataAccess.fileBased.BinaryFileAccess</node>
+    <node x="205.0" y="-137.0">dataAccess.fileBased.FileAccessInterface</node>
+    <node x="121.0" y="237.0">dataAccess.fileBased.DAO</node>
+    <node x="52.0" y="101.0">dataAccess.fileBased.UserDAO</node>
+    <node x="-155.5" y="102.0">dataAccess.cacheBased.UserDAO</node>
+    <node x="-122.5" y="-127.0">dataAccess.AbstractDB</node>
+    <node x="-499.5" y="103.0">dataAccess.cacheBased.HotelDAO</node>
+    <node x="-53.0" y="102.0">dataAccess.fileBased.HotelDAO</node>
+    <node x="-306.5" y="238.0">dataAccess.cacheBased.DAO</node>
+    <node x="-386.5" y="101.0">dataAccess.cacheBased.OrderDAO</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="dataAccess.fileBased.FileBasedDB" target="dataAccess.fileBased.OrderDAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.RoomDAO" target="dataAccess.cacheBased.DAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.DAO" target="dataAccess.cacheBased.CacheBasedDB">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.FileBasedDB" target="dataAccess.fileBased.RoomDAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.CacheBasedDB" target="dataAccess.cacheBased.OrderDAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.OrderDAO" target="dataAccess.fileBased.DAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.FileBasedDB" target="dataAccess.AbstractDB">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.FileBasedDB" target="dataAccess.fileBased.UserDAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.DAO" target="dataAccess.DAOInterface">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.UserDAO" target="dataAccess.cacheBased.DAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.DAO" target="dataAccess.fileBased.FileBasedDB">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.XMLFileAccess" target="dataAccess.fileBased.FileAccessInterface">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.RoomDAO" target="dataAccess.fileBased.DAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.BinaryFileAccess" target="dataAccess.fileBased.FileAccessInterface">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.UserDAO" target="dataAccess.fileBased.DAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.FileBasedDB" target="dataAccess.fileBased.FileAccessInterface">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.OrderDAO" target="dataAccess.cacheBased.DAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.CacheBasedDB" target="dataAccess.cacheBased.HotelDAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.CacheBasedDB" target="dataAccess.cacheBased.UserDAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.CacheBasedDB" target="dataAccess.AbstractDB">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.FileBasedDB" target="dataAccess.fileBased.HotelDAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.HotelDAO" target="dataAccess.cacheBased.DAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.HotelDAO" target="dataAccess.fileBased.DAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.fileBased.DAO" target="dataAccess.DAOInterface">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="dataAccess.cacheBased.CacheBasedDB" target="dataAccess.cacheBased.RoomDAO">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="0.5" y="120.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
