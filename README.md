@@ -1,5 +1,4 @@
 # JavaCoreFinalProject
-My final project for goit JavaCore
 
 Unit tests was written with help of framework JUnit 4.
 
