@@ -3,6 +3,7 @@ package dataAccess.fileBased;
 import dataAccess.DAOInterface;
 import entities.BaseEntity;
 import exceptions.EntityNotFoundById;
+import exceptions.ReadFromDBException;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
 /**
  * Created by g.zubenko on 26.01.2017.
  */
-abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
+abstract public class DAO<T extends BaseEntity> implements DAOInterface<T> {
     private FileBasedDB DB;
     abstract Stream<T> filter(Map<String, String> params);
     abstract List<T> getCache();
@@ -56,8 +57,10 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     }
 
     public boolean update(T item) {
-        getCacheOrReadDataFromDB().remove(item);
-        return writeCacheToFile();
+        if(getCache().contains(item)){
+            return writeCacheToFile();
+        }
+        return false;
     }
 
     public boolean delete(T item){
@@ -76,7 +79,10 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     public List<T> getCacheOrReadDataFromDB(){
         List<T> cache = getCache();
         if (cache.isEmpty()){
-            readCacheFromFile();
+            try {
+                readCacheFromFile();
+            }catch (ReadFromDBException e){
+            }
             cache = getCache();
         }
         return cache;

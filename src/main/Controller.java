@@ -1,3 +1,5 @@
+package main;
+
 import dataAccess.AbstractDB;
 import dataAccess.DAOInterface;
 import entities.Hotel;

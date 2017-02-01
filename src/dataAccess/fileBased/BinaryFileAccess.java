@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by g.zubenko on 27.01.2017.
  */
-public class BinariFileAccess implements FileAccessInterface {
+public class BinaryFileAccess implements FileAccessInterface {
     public <T extends BaseEntity> void readCacheFromFile(DAO<T> dao) {
         ArrayList<T> items;
         File file = new File(dao.getEntityClass().getSimpleName() + ".dat");

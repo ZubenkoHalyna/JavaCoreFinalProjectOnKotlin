@@ -67,7 +67,7 @@ public class Order extends BaseEntity implements Comparable<Order>, Serializable
         this.userId = userId;
     }
 
-    public User getUser(User user) {
+    public User getUser() {
         return cacheUser;
     }
 

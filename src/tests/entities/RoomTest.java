@@ -59,7 +59,7 @@ public class RoomTest {
         r.setHotel(firstHotelStub);
         assertEquals("Method setHotel in class Room doesn't work correct",firstHotelStub,r.getHotel());
         assertEquals("Method setHotel in class Room doesn't work correct: it doesn't set HotelId",
-                firstHotelStub.getId(),r.getHotelId());
+                firstHotelStub,r.getHotel());
     }
 
     @Test
@@ -150,7 +150,7 @@ public class RoomTest {
     public void getView() throws Exception {
         firstHotelStub = new Hotel("name","city");
         Room r = new Room(1000,2,firstHotelStub);
-        assertEquals("Method toString in class Room doesn't work correct","name, city, 1000 USD per day, 2 persons",
+        assertEquals("Method getView in class Room doesn't work correct","name, city, 1000 USD per day, 2 persons",
                 r.getView());
     }
 

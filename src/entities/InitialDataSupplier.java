@@ -64,7 +64,7 @@ public class InitialDataSupplier {
         rooms.add(new Room(1550,3,hotels.get(3)));
 
         orders = new ArrayList<>();
-        orders.add(new Order(users.get(0), rooms.get(1), DateUtil.stringToDate("10.02.2017"),
+        orders.add(new Order(users.get(0), rooms.get(6), DateUtil.stringToDate("10.02.2017"),
                 DateUtil.stringToDate("20.02.2017")));
     }
 

@@ -15,11 +15,16 @@ import java.util.stream.Stream;
  * Created by g.zubenko on 16.01.2017.
  */
 abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
-    private CacheDB DB;
+    private CacheBasedDB DB;
     abstract public Stream<T> filter(Map<String,String> params);
     abstract protected Class getEntityClass();
+    abstract List<T> getCache();
 
-    public DAO(CacheDB DB) {
+    public List<T> selectAll(){
+        return getCache();
+    }
+
+    public DAO(CacheBasedDB DB) {
         this.DB = DB;
     }
 
@@ -45,8 +50,9 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
 
     @Override
     public boolean update(T item){
-        //Nothing should be done. Objects in mock DB is always up to date.
-        return true;
+        //Nothing should be done. Objects in cache based DB is always up to date.
+        if (getCache().contains(item)) return true;
+        else return false;
     }
 
     public boolean delete(T item) {
@@ -65,7 +71,7 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
         }
     }
 
-    public CacheDB getDB() {
+    public CacheBasedDB getDB() {
         return DB;
     }
 }

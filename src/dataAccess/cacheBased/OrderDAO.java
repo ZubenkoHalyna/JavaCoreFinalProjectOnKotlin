@@ -12,15 +12,10 @@ import java.util.stream.Stream;
  * Created by g.zubenko on 23.01.2017.
  */
 class OrderDAO extends DAO<Order>{
-    private static List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
-    public OrderDAO(CacheDB DB) {
+    public OrderDAO(CacheBasedDB DB) {
         super(DB);
-    }
-
-    @Override
-    public List<Order> selectAll() {
-        return orders;
     }
 
     @Override
@@ -31,5 +26,14 @@ class OrderDAO extends DAO<Order>{
     @Override
     protected Class getEntityClass() {
         return Order.class;
+    }
+
+    @Override
+    List<Order> getCache() {
+        return orders;
+    }
+
+    void setCache(List<Order> orders) {
+        this.orders = orders;
     }
 }

@@ -1,6 +1,8 @@
+package main;
+
 import dataAccess.AbstractDB;
-import dataAccess.cacheBased.CacheDB;
-import dataAccess.fileBased.BinariFileAccess;
+import dataAccess.cacheBased.CacheBasedDB;
+import dataAccess.fileBased.BinaryFileAccess;
 import dataAccess.fileBased.FileBasedDB;
 import dataAccess.fileBased.XMLFileAccess;
 import utils.IOUtil;
@@ -48,19 +50,26 @@ public class Main {
                 DB = new FileBasedDB(new XMLFileAccess());
                 break;
             case 2:
-                DB = new FileBasedDB(new BinariFileAccess());
+                DB = new FileBasedDB(new BinaryFileAccess());
                 break;
             case 3:
-                DB = new CacheDB();
+                DB = new CacheBasedDB();
                 break;
         }
 
+        checkData();
+    }
+
+    private static void checkData() {
+        // Check if DB files are correct, if they are not try to override them with initial data.
+        // If overriding fail run the program in a test mode
         if (!DB.dataIsCorrect()) {
             try {
                 DB.Initialize();
                 IOUtil.informUser("DB was filled with initial data");
             } catch (Exception e) {
-                DB = new CacheDB();
+                DB = new CacheBasedDB();
+                DB.Initialize();
                 IOUtil.informUser("DB files are unavailable. Programme will run in test mode.");
             }
         }

@@ -10,9 +10,9 @@ import java.util.stream.Stream;
  * Created by ssizov on 17.01.2017.
  */
 class UserDAO extends DAO<User> {
-    private static List<User> users = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
 
-    public UserDAO(CacheDB DB) {
+    public UserDAO(CacheBasedDB DB) {
         super(DB);
     }
 
@@ -22,12 +22,16 @@ class UserDAO extends DAO<User> {
     }
 
     @Override
-    public List<User> selectAll() {
-        return users;
+    protected Class getEntityClass() {
+        return User.class;
     }
 
     @Override
-    protected Class getEntityClass() {
-        return User.class;
+    List<User> getCache() {
+        return users;
+    }
+
+    void setCache(List<User> users) {
+        this.users = users;
     }
 }

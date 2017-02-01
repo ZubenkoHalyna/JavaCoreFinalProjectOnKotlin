@@ -6,18 +6,17 @@ import entities.InitialDataSupplier;
 /**
  * Created by g.zubenko on 17.01.2017.
  */
-public class CacheDB implements AbstractDB {
+public class CacheBasedDB implements AbstractDB {
     private HotelDAO hotelDAO;
     private UserDAO userDAO;
     private RoomDAO roomDAO;
     private OrderDAO orderDAO;
 
-    public CacheDB() {
+    public CacheBasedDB() {
         hotelDAO = new HotelDAO(this);
         userDAO = new UserDAO(this);
         roomDAO = new RoomDAO(this);
         orderDAO = new OrderDAO(this);
-        Initialize();
     }
 
     @Override
@@ -42,15 +41,18 @@ public class CacheDB implements AbstractDB {
 
     @Override
     public boolean dataIsCorrect() {
-        // Mock data don't need to be checked
-        return true;
+        if (getRoomDAO().selectAll().isEmpty() || getHotelDAO().selectAll().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
     public void Initialize() {
-        getUserDAO().insertAll(InitialDataSupplier.getInstance().getUsers());
-        getHotelDAO().insertAll(InitialDataSupplier.getInstance().getHotels());
-        getRoomDAO().insertAll(InitialDataSupplier.getInstance().getRooms());
-        getOrderDAO().insertAll(InitialDataSupplier.getInstance().getOrders());
+        getUserDAO().setCache(InitialDataSupplier.getInstance().getUsers());
+        getHotelDAO().setCache(InitialDataSupplier.getInstance().getHotels());
+        getRoomDAO().setCache(InitialDataSupplier.getInstance().getRooms());
+        getOrderDAO().setCache(InitialDataSupplier.getInstance().getOrders());
     }
 }

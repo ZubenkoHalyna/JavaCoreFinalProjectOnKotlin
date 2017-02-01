@@ -2,13 +2,14 @@ package entities;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * Created by g.zubenko on 23.01.2017.
  */
 @XmlRootElement
-public abstract class BaseEntity {
+public abstract class BaseEntity implements Serializable {
     private long id;
     abstract String getView();
 

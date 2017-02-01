@@ -10,15 +10,10 @@ import java.util.stream.Stream;
  * Created by g.zubenko on 18.01.2017.
  */
 class RoomDAO extends DAO<Room>{
-    private static List<Room> rooms = new ArrayList<>();
+    private List<Room> rooms = new ArrayList<>();
 
-    public RoomDAO(CacheDB DB) {
+    public RoomDAO(CacheBasedDB DB) {
         super(DB);
-    }
-
-    @Override
-    public List<Room> selectAll() {
-        return rooms;
     }
 
     @Override
@@ -29,5 +24,14 @@ class RoomDAO extends DAO<Room>{
     @Override
     protected Class getEntityClass() {
         return Room.class;
+    }
+
+    @Override
+    List<Room> getCache() {
+        return rooms;
+    }
+
+    void setCache(List<Room> rooms) {
+        this.rooms = rooms;
     }
 }
