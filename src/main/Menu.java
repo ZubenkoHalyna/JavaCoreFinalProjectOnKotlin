@@ -138,7 +138,6 @@ public class Menu {
         int numberOfRoom = IOUtil.readInt("number of the room you want to book",1,rooms.size())-1;
         Room room = rooms.get(numberOfRoom);
         //TODO don't ask dates again
-        //TODO startSate before endDate
         Date startDate = IOUtil.readDate("start reservation date",false);
         Date endDate = IOUtil.readDate("end reservation date",false,startDate);
         if (controller.isRoomFree(room,startDate,endDate)){
@@ -168,7 +167,7 @@ public class Menu {
         }
     }
 
-    public void cancelReservation(List<Order> orders) {
+    private void cancelReservation(List<Order> orders) {
         int numberOfRoom = IOUtil.readInt("number of the reservation", 1, orders.size()) - 1;
         controller.deleteOrder(orders.get(numberOfRoom));
         IOUtil.informUser("Reservation was canceled successfully!");
