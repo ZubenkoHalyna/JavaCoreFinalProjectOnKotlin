@@ -2,6 +2,7 @@ package tests.entities;
 
 import entities.Hotel;
 import entities.Room;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

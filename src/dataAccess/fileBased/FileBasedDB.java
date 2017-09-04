@@ -58,13 +58,13 @@ public class FileBasedDB implements AbstractDB {
 
     @Override
     public void Initialize() {
-        getUserDAO().setCache(InitialDataSupplier.getInstance().getUsers());
+        getUserDAO().setCache(InitialDataSupplier.INSTANCE.getUsers());
         getUserDAO().writeCacheToFile();
-        getHotelDAO().setCache(InitialDataSupplier.getInstance().getHotels());
+        getHotelDAO().setCache(InitialDataSupplier.INSTANCE.getHotels());
         getHotelDAO().writeCacheToFile();
-        getRoomDAO().setCache(InitialDataSupplier.getInstance().getRooms());
+        getRoomDAO().setCache(InitialDataSupplier.INSTANCE.getRooms());
         getRoomDAO().writeCacheToFile();
-        getOrderDAO().setCache(InitialDataSupplier.getInstance().getOrders());
+        getOrderDAO().setCache(InitialDataSupplier.INSTANCE.getOrders());
         getOrderDAO().writeCacheToFile();
     }
 

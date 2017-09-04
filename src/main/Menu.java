@@ -84,8 +84,8 @@ public class Menu {
     private void findRoom() {
         Map<String, String> params = new HashMap<>();
         for (Room.FieldsForSearch field : Room.FieldsForSearch.values()) {
-            if (field.directForUser) {
-                String value = IOUtil.readFormattedString(field.type, field.description);
+            if (field.getDirectForUser()) {
+                String value = IOUtil.readFormattedString(field.getType(), field.getDescription());
                 params.put(field.toString(), value);
                 checkIndirectParams(params, field, value);
             }
@@ -101,13 +101,13 @@ public class Menu {
     private void checkIndirectParams(Map<String, String> params, Room.FieldsForSearch field, String value) {
         if (field== Room.FieldsForSearch.START_DATE && !value.isEmpty()){
             try {String newValue = DateUtil.dateToStr(
-                    IOUtil.readDate(Room.FieldsForSearch.END_DATE.description, true, DateUtil.stringToDate(value)));
+                    IOUtil.readDate(Room.FieldsForSearch.END_DATE.getDescription(), true, DateUtil.stringToDate(value)));
             params.put(Room.FieldsForSearch.END_DATE.toString(), newValue);}
             catch (InputWasSkippedException e){}
         }
         if (field== Room.FieldsForSearch.PRICE && !value.isEmpty()){
-            String newValue = IOUtil.readFormattedString(Room.FieldsForSearch.PRICE_VARIATION.type,
-                    Room.FieldsForSearch.PRICE_VARIATION.description);
+            String newValue = IOUtil.readFormattedString(Room.FieldsForSearch.PRICE_VARIATION.getType(),
+                    Room.FieldsForSearch.PRICE_VARIATION.getDescription());
             params.put(Room.FieldsForSearch.PRICE_VARIATION.toString(), newValue);
         }
     }

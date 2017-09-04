@@ -5,12 +5,14 @@ import entities.Order;
 import entities.Room;
 import entities.User;
 import main.Controller;
-import org.junit.Test;
 
 import java.util.Date;
 import java.util.HashMap;
 
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
+
 
 /**
  * Created by g.zubenko on 01.02.2017.
@@ -18,6 +20,9 @@ import static org.junit.Assert.assertEquals;
 public class ControllerTest {
     MockDB DB = new MockDB();
     Controller controller = new Controller(DB);
+    private Order orderDummy = new Order(new User("",""),new Room(0,0,new Hotel()),
+            new Date(), new Date());
+
     @Test
     public void findHotelByName() throws Exception {
         DB.getHotelDAO().nextStep();
@@ -79,7 +84,7 @@ public class ControllerTest {
     @Test
     public void deleteOrder() throws Exception {
         DB.getOrderDAO().nextStep();
-        controller.deleteOrder(new Order());
+        controller.deleteOrder(orderDummy);
         assertEquals("Method deleteOrder in class Controller doesn't work correct: it should call DB.getOrderDAO().delete()",
                 1,DB.getOrderDAO().getDeleteNumber());
     }

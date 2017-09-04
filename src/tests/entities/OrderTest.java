@@ -4,10 +4,11 @@ import entities.Hotel;
 import entities.Order;
 import entities.Room;
 import entities.User;
-import org.junit.Test;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 

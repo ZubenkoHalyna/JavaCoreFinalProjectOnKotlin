@@ -50,9 +50,9 @@ public class CacheBasedDB implements AbstractDB {
 
     @Override
     public void Initialize() {
-        getUserDAO().setCache(InitialDataSupplier.getInstance().getUsers());
-        getHotelDAO().setCache(InitialDataSupplier.getInstance().getHotels());
-        getRoomDAO().setCache(InitialDataSupplier.getInstance().getRooms());
-        getOrderDAO().setCache(InitialDataSupplier.getInstance().getOrders());
+        getUserDAO().setCache(InitialDataSupplier.INSTANCE.getUsers());
+        getHotelDAO().setCache(InitialDataSupplier.INSTANCE.getHotels());
+        getRoomDAO().setCache(InitialDataSupplier.INSTANCE.getRooms());
+        getOrderDAO().setCache(InitialDataSupplier.INSTANCE.getOrders());
     }
 }

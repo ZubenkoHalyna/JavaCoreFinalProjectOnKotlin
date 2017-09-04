@@ -7,14 +7,17 @@ import entities.Hotel;
 import entities.Order;
 import entities.Room;
 import entities.User;
-import org.junit.Test;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by g.zubenko on 30.01.2017.
@@ -214,4 +217,5 @@ public class FiltersUtilTest {
                         new GregorianCalendar(2017, Calendar.FEBRUARY, 9).getTime(),
                         DB.getOrderDAO()));
     }
+
 }
