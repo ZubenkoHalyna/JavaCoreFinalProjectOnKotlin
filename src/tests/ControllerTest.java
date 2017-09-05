@@ -20,8 +20,11 @@ import static org.junit.Assert.assertEquals;
 public class ControllerTest {
     MockDB DB = new MockDB();
     Controller controller = new Controller(DB);
-    private Order orderDummy = new Order(new User("",""),new Room(0,0,new Hotel()),
-            new Date(), new Date());
+    Hotel hotelDummy = new Hotel("","");
+    Date dateDummy = new Date();
+
+    private Order orderDummy = new Order(new User("",""),new Room(0,0,hotelDummy),
+            dateDummy, dateDummy);
 
     @Test
     public void findHotelByName() throws Exception {
@@ -58,8 +61,7 @@ public class ControllerTest {
     @Test
     public void registerOrder() throws Exception {
         DB.getOrderDAO().nextStep();
-        Date date = new Date();
-        controller.registerOrder(new User("",""),new Room(0,0,new Hotel()),date,date);
+        controller.registerOrder(new User("",""),new Room(0,0, hotelDummy),dateDummy,dateDummy);
         assertEquals("Method registerOrder in class Controller doesn't work correct: it should call DB.getOrderDAO().insert()",
                 1,DB.getOrderDAO().getInsertNumber());
     }
@@ -67,8 +69,7 @@ public class ControllerTest {
     @Test
     public void isRoomFree() throws Exception {
         DB.getRoomDAO().nextStep();
-        Date date = new Date();
-        controller.isRoomFree(new Room(0,0,new Hotel()),date,date);
+        controller.isRoomFree(new Room(0,0, hotelDummy),dateDummy,dateDummy);
         assertEquals("Method isRoomFree in class Controller doesn't work correct: it should call DB.getRoomDAO().selectFirst()",
                 1,DB.getRoomDAO().getSelectFirstNumber());
     }

@@ -13,8 +13,8 @@ import static org.junit.Assert.assertTrue;
  * Created by g.zubenko on 28.01.2017.
  */
 public class RoomTest {
-    private Hotel firstHotelStub = new Hotel();
-    private Hotel secondHotelStub = new Hotel();
+    private Hotel firstHotelStub = new Hotel("","");
+    private Hotel secondHotelStub = new Hotel("","");
 
     @Test
     public void getPrice() throws Exception {

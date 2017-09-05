@@ -43,7 +43,7 @@ abstract class DAO<T extends BaseEntity> implements DAOInterface<T> {
     }
 
     @Override
-    public boolean insertAll(Collection<T> items){
+    public boolean insertAll(Collection<? extends T> items){
         List<T> storage = selectAll();
         return storage.addAll(items);
     }

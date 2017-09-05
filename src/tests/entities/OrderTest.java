@@ -48,21 +48,21 @@ public class OrderTest {
 
     @Test
     public void getUserId() throws Exception {
-        Order o = new Order(userStub,roomStub,null,null);
+        Order o = new Order(userStub,roomStub, firstDateStub, firstDateStub);
         assertEquals("Method getUserId in class Order doesn't work correct",
                 userStub.getId(), o.getUserId());
     }
 
     @Test
     public void getUser() throws Exception {
-        Order o = new Order(userStub,roomStub,null,null);
+        Order o = new Order(userStub,roomStub, firstDateStub, firstDateStub);
         assertEquals("Method getUser in class Order doesn't work correct",
                 userStub, o.getUser());
     }
 
     @Test
     public void setUser() throws Exception {
-        Order o = new Order(new User("",""),roomStub,null,null);
+        Order o = new Order(new User("",""),roomStub, firstDateStub, firstDateStub);
         o.setUser(userStub);
         assertEquals("Method setUser in class Order doesn't work correct", userStub, o.getUser());
         assertEquals("Method setUser in class Order doesn't work correct: it doesn't set UserId", userStub.getId(), o.getUserId());
@@ -70,21 +70,21 @@ public class OrderTest {
 
     @Test
     public void getRoomId() throws Exception {
-        Order o = new Order(userStub,roomStub,null,null);
+        Order o = new Order(userStub,roomStub,firstDateStub,firstDateStub);
         assertEquals("Method getRoomId in class Order doesn't work correct", roomStub.getId(), o.getRoomId());
 
     }
 
     @Test
     public void getRoom() throws Exception {
-        Order o = new Order(userStub,roomStub,null,null);
+        Order o = new Order(userStub,roomStub,firstDateStub,firstDateStub);
         assertEquals("Method getRoom in class Order doesn't work correct",
                 roomStub, o.getRoom());
     }
 
     @Test
     public void setRoom() throws Exception {
-        Order o = new Order(userStub,new Room(0,0,hotelStub),null,null);
+        Order o = new Order(userStub,new Room(0,0,hotelStub),firstDateStub,firstDateStub);
         o.setRoom(roomStub);
         assertEquals("Method setRoom in class Order doesn't work correct", roomStub, o.getRoom());
         assertEquals("Method setRoom in class Order doesn't work correct: it doesn't set RoomId", roomStub.getId(), o.getRoomId());
@@ -92,14 +92,14 @@ public class OrderTest {
 
     @Test
     public void getStartReservationDate() throws Exception {
-        Order o = new Order(userStub,roomStub,firstDateStub,null);
+        Order o = new Order(userStub,roomStub,firstDateStub,secondDateStub);
         assertEquals("Method getStartReservationDate in class Order doesn't work correct", firstDateStub,
                 o.getStartReservationDate());
     }
 
     @Test
     public void setStartReservationDate() throws Exception {
-        Order o = new Order(userStub,roomStub,null,null);
+        Order o = new Order(userStub,roomStub, secondDateStub, secondDateStub);
         o.setStartReservationDate(firstDateStub);
         assertEquals("Method setStartReservationDate in class Order doesn't work correct", firstDateStub,
                 o.getStartReservationDate());
@@ -107,14 +107,14 @@ public class OrderTest {
 
     @Test
     public void getEndReservationDate() throws Exception {
-        Order o = new Order(userStub,roomStub,null,firstDateStub);
+        Order o = new Order(userStub,roomStub,secondDateStub,firstDateStub);
         assertEquals("Method getEndReservationDate in class Order doesn't work correct", firstDateStub,
                 o.getEndReservationDate());
     }
 
     @Test
     public void setEndReservationDate() throws Exception {
-        Order o = new Order(userStub,roomStub,null,null);
+        Order o = new Order(userStub,roomStub, secondDateStub, secondDateStub);
         o.setEndReservationDate(firstDateStub);
         assertEquals("Method setEndReservationDate in class Order doesn't work correct", firstDateStub,
                 o.getEndReservationDate());

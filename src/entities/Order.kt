@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlTransient
 
 class Order(_user: User, _room: Room, var startReservationDate: Date, var endReservationDate: Date) : BaseEntity(), Comparable<Order>, Serializable {
     enum class FieldsForSearch {ID, USER_ID, ROOM_ID, START_DATE, END_DATE }
+    constructor():this(User(), Room(), Date(), Date())
 
     var userId = _user.id
         @XmlElement private set

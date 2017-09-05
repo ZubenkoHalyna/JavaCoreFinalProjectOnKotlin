@@ -25,7 +25,7 @@ public class TestDataSupplier {
     private Order order = new Order(user,room,new GregorianCalendar(2017,0,1).getTime(),new GregorianCalendar(2017,0,10).getTime() );
     private List<Hotel> hotelList = new ArrayList<>();
     private List<User> userList = new ArrayList<>();
-    private  List<Room> roomList = new ArrayList<>();
+    private List<Room> roomList = new ArrayList<>();
     private List<Order> orderList = new ArrayList<>();
 
     private TestDataSupplier()

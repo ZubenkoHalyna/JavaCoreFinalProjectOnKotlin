@@ -12,9 +12,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * Created by g.zubenko on 26.01.2017.
- */
 abstract public class DAO<T extends BaseEntity> implements DAOInterface<T> {
     private FileBasedDB DB;
     abstract Stream<T> filter(Map<String, String> params);
@@ -51,7 +48,7 @@ abstract public class DAO<T extends BaseEntity> implements DAOInterface<T> {
     }
 
     @Override
-    public boolean insertAll(Collection<T> items) {
+    public boolean insertAll(Collection<? extends T> items) {
         getCacheOrReadDataFromDB().addAll(items);
         return writeCacheToFile();
     }

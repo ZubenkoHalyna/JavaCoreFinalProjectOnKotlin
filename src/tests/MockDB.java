@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class MockDB implements AbstractDB {
 
-    class MockDAO<T> implements DAOInterface<T>{
+    class MockDAO<T> implements DAOInterface<T> {
         private int selectNumber;
         private int selectFirstNumber;
         private int selectAllNumber;

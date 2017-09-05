@@ -6,6 +6,8 @@ import entities.FieldType.*
 import javax.xml.bind.annotation.XmlElement
 
 class Room(var price: Int, var persons: Int, _hotel:Hotel) : BaseEntity(), Serializable, Comparable<Room> {
+    constructor():this(0,0, Hotel())
+
     var hotelId: Long = _hotel.id
         @XmlElement
         private set
